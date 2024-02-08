@@ -21,7 +21,7 @@ def check_statements(model, tokenizer, data, statement_tag="statement", answer_t
     ctr = 0
     # Calculate total number of batches for progress bar
     total_batches = len(data[statement_tag]) // batch_size + (0 if len(data[statement_tag]) % batch_size == 0 else 1)
-
+    answers = []
     # Wrap the zip function with tqdm for the progress bar
     for batch, batch_gt in tqdm(zip(batchify(data[statement_tag], batch_size), batchify(data[answer_tag], batch_size)), total=total_batches):
         batch = list(batch.apply(lambda x: format.format(x)))
@@ -30,7 +30,8 @@ def check_statements(model, tokenizer, data, statement_tag="statement", answer_t
             if batch_gt.iloc[i].lower() in answer.lower():
                 correct[ctr] = 1
             ctr += 1
-    return correct 
+            answers.append(answer)
+    return correct, answers
 
 
 def get_hidden(model, tokenizer, module_names, data, statement_tag="statement", format="{}", batch_size=10):
