@@ -1,11 +1,10 @@
 torch
-json
-os
+pyarrow
 pandas
 transformers
 ipykernel
 jupyter
-ipywidgets
+ipywidgets==7.7.1
 matplotlib
 git+https://github.com/davidbau/baukit
 tqdm
