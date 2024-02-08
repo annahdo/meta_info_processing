@@ -1,0 +1,11 @@
+torch
+json
+os
+pandas
+transformers
+ipykernel
+jupyter
+ipywidgets
+matplotlib
+git+https://github.com/davidbau/baukit
+tqdm
