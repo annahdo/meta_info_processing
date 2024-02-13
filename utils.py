@@ -1,6 +1,40 @@
 from tqdm import tqdm
 import numpy as np
 from baukit import TraceDict
+import pandas as pd
+from datasets import load_dataset
+import os
+import json
+
+
+def load_data_boolq(split='train'):
+    dataset = load_dataset("google/boolq")
+    truth_array = np.array(dataset[split]['answer'])
+    # convert to string array with yes/no values
+    truth_array = np.where(truth_array, 'yes', 'no')
+
+    question_array = np.array(dataset['train']['question'])
+    # add questionmark after each question
+    question_array = np.char.add(question_array, '?')
+    # make first letter a capital
+    question_array = np.char.capitalize(question_array)
+
+    # make a dataframe
+    df = pd.DataFrame({'question': question_array, 'answer': truth_array})
+    return df, 'question', 'answer'
+
+def load_data_questions_1000_all():
+    if not os.path.exists('questions_1000_all.json'):
+        os.system('wget https://raw.githubusercontent.com/LoryPack/LLM-LieDetector/main/data/raw_questions/questions_1000_all.json')
+
+    # load json file
+    with open('questions_1000_all.json') as json_file:
+        data = json.load(json_file)
+
+    # convert json to dataframe
+    data_frame = pd.DataFrame(data).T
+    return data_frame, 'statement', 'answer'
+
 
 def generate(model, tokenizer, text, max_new_tokens=5):
     inputs = tokenizer(text, return_tensors="pt", padding=True).to(model.device)
