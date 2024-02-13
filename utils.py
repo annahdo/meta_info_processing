@@ -5,6 +5,7 @@ import pandas as pd
 from datasets import load_dataset
 import os
 import json
+import torch
 
 
 def load_data_boolq(split='train'):
@@ -72,13 +73,16 @@ def get_hidden(model, tokenizer, module_names, data, statement_tag="statement", 
 
     total_batches = len(data[statement_tag]) // batch_size + (0 if len(data[statement_tag]) % batch_size == 0 else 1)
     hidden_states = {}
-    with TraceDict(model, module_names) as return_dict:
+    with torch.no_grad(), TraceDict(model, module_names) as return_dict:
 
         for batch in tqdm(batchify(data[statement_tag], batch_size), total=total_batches):
             batch = list(batch.apply(lambda x: format.format(x)))
             inputs = tokenizer(batch, return_tensors="pt", padding=True).to(model.device)
             _ = model(**inputs)
             for module_name in module_names:
-                hidden_states[module_name] = return_dict[module_name].output
+                if isinstance(return_dict[module_name].output, tuple):
+                    hidden_states[module_name] = return_dict[module_name].output[0].detach().cpu()
+                else:
+                    hidden_states[module_name] = return_dict[module_name].output.detach().cpu()
 
     return hidden_states
