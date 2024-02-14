@@ -155,3 +155,43 @@ def prepare_data(hidden_states_lie, hidden_states_truth, train_perc=0.8):
     y_train = y_train[indices]
 
     return X_train, X_test, y_train, y_test
+
+def prepare_data_diffs(hidden_states_lie, hidden_states_truth, train_perc=0.8):
+
+    hidden_states_truth_diffs = {}
+    hidden_states_lie_diffs = {}
+
+    keys = list(hidden_states_lie.keys())
+    for i in range(len(keys) - 1):
+        # Calculate the difference between adjacent tensors
+        hidden_states_lie_diffs[keys[i]] = hidden_states_lie[keys[i + 1]] - hidden_states_lie[keys[i]]
+        hidden_states_truth_diffs[keys[i]] = hidden_states_truth[keys[i + 1]] - hidden_states_truth[keys[i]]
+
+
+    num_samples = hidden_states_lie_diffs[next(iter(hidden_states_lie))].shape[0]
+
+    # indices for train/test split
+    np.random.seed(0)
+    indices = np.random.permutation(num_samples)
+    train_indices = indices[:int(train_perc*num_samples)]
+    test_indices = indices[int(train_perc*num_samples):]
+
+    # train/test split
+    hidden_states_lie_train = {k: v[train_indices] for k, v in hidden_states_lie_diffs.items()}
+    hidden_states_lie_test = {k: v[test_indices] for k, v in hidden_states_lie_diffs.items()}
+    hidden_states_truth_train = {k: v[train_indices] for k, v in hidden_states_truth_diffs.items()}
+    hidden_states_truth_test = {k: v[test_indices] for k, v in hidden_states_truth_diffs.items()}
+
+    # concatenate lies and truth for each key and make labels
+    X_train = {k: np.concatenate([hidden_states_lie_train[k], hidden_states_truth_train[k]], axis=0) for k in hidden_states_lie_train.keys()}
+    X_test = {k: np.concatenate([hidden_states_lie_test[k], hidden_states_truth_test[k]], axis=0) for k in hidden_states_lie_test.keys()}
+
+    y_train = np.concatenate([np.zeros(len(train_indices)), np.ones(len(train_indices))])
+    y_test = np.concatenate([np.zeros(len(test_indices)), np.ones(len(test_indices))])
+
+    # shuffle train data
+    indices = np.random.permutation(len(y_train))
+    X_train = {k: v[indices] for k, v in X_train.items()}
+    y_train = y_train[indices]
+
+    return X_train, X_test, y_train, y_test
