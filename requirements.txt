@@ -9,3 +9,4 @@ matplotlib
 git+https://github.com/davidbau/baukit
 tqdm
 datasets
+scikit-learn
