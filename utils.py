@@ -9,6 +9,7 @@ import torch
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 from sklearn.preprocessing import StandardScaler
+import torch.nn.functional as F
 
 
 def load_data_boolq(split='train'):
@@ -195,3 +196,36 @@ def prepare_data_diffs(hidden_states_lie, hidden_states_truth, train_perc=0.8):
     y_train = y_train[indices]
 
     return X_train, X_test, y_train, y_test
+
+
+def calc_cross_entropy(module_name, hidden_states):
+    loss = torch.nn.CrossEntropyLoss()
+    # iterare through dictionary and calculate cross entropy
+    target = hidden_states[module_name].softmax(dim=1)
+    cross_entropy = {}
+    for k, v in hidden_states.items():
+        if k==module_name:
+            continue
+        # calculate cross entropy between module_name and k
+        cross_entropy[k] = loss(v, target)
+        
+    return cross_entropy
+
+def calc_KL_divergence(target, hidden_states):
+    criterion = torch.nn.KLDivLoss(reduction='batchmean')
+    # iterare through dictionary and calculate cross entropy
+    kl = {}
+    for k, v in hidden_states.items():
+        # calculate cross entropy between module_name and k
+        kl[k] = criterion(F.log_softmax(v, dim=1), target)
+    return kl
+
+def calc_cross_entropy(target, hidden_states):
+    loss = torch.nn.CrossEntropyLoss()
+    # iterare through dictionary and calculate cross entropy
+    cross_entropy = {}
+    for k, v in hidden_states.items():
+        # calculate cross entropy between module_name and k
+        cross_entropy[k] = loss(v, target)
+        
+    return cross_entropy
