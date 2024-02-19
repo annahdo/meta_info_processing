@@ -37,7 +37,9 @@ def load_data_set(dataset_name):
     return dataset_dict
 
 def get_selected_data(model, tokenizer, dataset_name, dataset, question_tag, answer_tag, truth_format, lie_format, batch_size=64):
-
+    # if folder results does not exist make it
+    if not os.path.exists('results'):
+        os.makedirs('results')
 
     # check if file exists
     if os.path.isfile(f"results/{dataset_name}_success.npy"):
@@ -91,11 +93,12 @@ def load_data_boolq(split='train'):
     return df, 'question', 'answer'
 
 def load_data_questions_1000_all():
+    # save data in data folder
     if not os.path.exists('questions_1000_all.json'):
-        os.system('wget https://raw.githubusercontent.com/LoryPack/LLM-LieDetector/main/data/raw_questions/questions_1000_all.json')
+        os.system('wget -P data https://raw.githubusercontent.com/LoryPack/LLM-LieDetector/main/data/raw_questions/questions_1000_all.json')
 
     # load json file
-    with open('questions_1000_all.json') as json_file:
+    with open('data/questions_1000_all.json') as json_file:
         data = json.load(json_file)
 
     # convert json to dataframe
