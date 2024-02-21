@@ -141,26 +141,28 @@ def check_statements(model, tokenizer, data, statement_tag="statement", answer_t
 def get_hidden(model, tokenizer, module_names, data, statement_tag="statement", format="{}", batch_size=10, token_position=-1):
 
     total_batches = len(data[statement_tag]) // batch_size + (0 if len(data[statement_tag]) % batch_size == 0 else 1)
-    hidden_states = {}
+    # list of empty tensors for hidden states
+    hidden_states = [None] * len(module_names)
     with torch.no_grad(), TraceDict(model, module_names) as return_dict:
 
         for batch in tqdm(batchify(data[statement_tag], batch_size), total=total_batches):
             batch = list(batch.apply(lambda x: format.format(x)))
             inputs = tokenizer(batch, return_tensors="pt", padding=True).to(model.device)
             _ = model(**inputs)
-            for module_name in module_names:
+            for i, module_name in enumerate(module_names):
+                # check for tuple output (in residual stream usually)
                 if isinstance(return_dict[module_name].output, tuple):
-                    if module_name in hidden_states:
-                        hidden_states[module_name] = torch.cat([hidden_states[module_name], return_dict[module_name].output[0][:, token_position, :].detach().cpu()], dim=0)
-                    else:
-                        hidden_states[module_name] = return_dict[module_name].output[0][:, token_position, :].detach().cpu()
+                    output = return_dict[module_name].output[0][:, token_position, :].detach().cpu()
                 else:
-                    if module_name in hidden_states:
-                        hidden_states[module_name] = torch.cat([hidden_states[module_name], return_dict[module_name].output[:, token_position, :].detach().cpu()], dim=0)
-                    else:
-                        hidden_states[module_name] = return_dict[module_name].output[:, token_position, :].detach().cpu()
+                    output = return_dict[module_name].output[:, token_position, :].detach().cpu()
 
-                
+                if hidden_states[i] is None:
+                    hidden_states[i] = output
+                else:
+                    hidden_states[i] = torch.cat([hidden_states[i], output], dim=0)
+
+        # convert list to tensor with new dimension at start
+        hidden_states = torch.cat([t.unsqueeze(0) for t in hidden_states], dim=0)
 
     return hidden_states
 
@@ -285,12 +287,7 @@ def calc_KL_divergence(target, hidden_states):
         kl[k] = criterion(F.log_softmax(v, dim=1), target)
     return kl
 
-def calc_cross_entropy(target, hidden_states):
-    loss = torch.nn.CrossEntropyLoss()
-    # iterare through dictionary and calculate cross entropy
-    cross_entropy = {}
-    for k, v in hidden_states.items():
-        # calculate cross entropy between module_name and k
-        cross_entropy[k] = loss(v, target)
-        
-    return cross_entropy
+
+def unembedd(model, tensors):
+    device = model.device
+    return model.lm_head(model.model.norm(tensors.unsqueeze(0).to(device))).squeeze().detach().cpu().float()
