@@ -1,112 +1,14 @@
 from tqdm import tqdm
 import numpy as np
 from baukit import TraceDict
-import pandas as pd
-from datasets import load_dataset
-import os
-import json
 import torch
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 from sklearn.preprocessing import StandardScaler
-import torch.nn.functional as F
-
-
-def load_data_set(dataset_name):
-    if dataset_name == 'BoolQ':
-        dataset, question_tag, answer_tag = load_data_boolq() # using using and answer tags
-        lie_format =  "<|system|>You will give an intentionally incorrect response. You will only use 'yes' or 'no'.</s><|user|>{}</s><|assistant|>\n"
-        truth_format =  "<|system|>You will answer correctly. You will only use 'yes' or 'no'.</s><|user|>{}</s><|assistant|>\n"
-        no_format = "<|user|>{}</s><|assistant|>"
-    elif dataset_name == 'Questions1000':
-        dataset, question_tag, answer_tag = load_data_questions_1000_all() # using statement and answer tags
-        lie_format = "<|system|>You will complete the sentence with intentionally false information.</s><|assistant|>{}"
-        truth_format = "<|system|>You will complete the sentence with true information.</s><|assistant|>{}"
-        no_format = "<|assistant|>{}"   
-
-    dataset_dict = {
-        'dataset_name': dataset_name, 
-        'dataset': dataset,
-        'question_tag': question_tag,
-        'answer_tag': answer_tag,
-        'lie_format': lie_format,
-        'truth_format': truth_format,
-        'no_format': no_format
-    }
-
-    return dataset_dict
-
-def get_selected_data(model, tokenizer, dataset_name, dataset, question_tag, answer_tag, truth_format, lie_format, batch_size=64):
-    # if folder results does not exist make it
-    if not os.path.exists('results'):
-        os.makedirs('results')
-
-    # check if file exists
-    if os.path.isfile(f"results/{dataset_name}_success.npy"):
-        success = np.load(f"results/{dataset_name}_success.npy")
-        selected_data = dataset[success]
-
-        _, selected_lies = check_statements(model, tokenizer, selected_data, format=lie_format, statement_tag=question_tag, answer_tag=answer_tag, batch_size=batch_size)
-        selected_lies = np.array(selected_lies)
-
-    else:
-        # truths_org, _ = check_statements(model, tokenizer, dataset, format=no_format, statement_tag=question_tag, answer_tag=answer_tag)
-        lies, lies_gen = check_statements(model, tokenizer, dataset, format=lie_format, statement_tag=question_tag, answer_tag=answer_tag, batch_size=batch_size)
-        lies = 1-lies
-        truths, _ = check_statements(model, tokenizer, dataset, format=truth_format, statement_tag=question_tag, answer_tag=answer_tag, batch_size=batch_size)
-
-        print(f"dataset: {dataset_name}")
-        print(f"# questions: {len(dataset)}")
-
-        # print(f"format: {no_format}: {truths_org.mean():.2f}")
-        print(f"format: {lie_format}: {1-lies.mean():.2f}")
-        print(f"format: {truth_format}: {truths.mean():.2f}")
-
-        # select data for which truth telling and lies were successful
-        success = (truths > 0.5) & (lies > 0.5)
-
-        # save success indices to file
-        np.save(f"results/{dataset_name}_success.npy", success)
-
-        selected_lies = np.array(lies_gen)[success]
-        selected_data = dataset[success]
-        
-    print(f"# questions where lying and truth telling was successful: {len(selected_data)}")
-
-    return selected_data, selected_lies
-
-
-def load_data_boolq(split='train'):
-    dataset = load_dataset("google/boolq")
-    truth_array = np.array(dataset[split]['answer'])
-    # convert to string array with yes/no values
-    truth_array = np.where(truth_array, 'yes', 'no')
-
-    question_array = np.array(dataset['train']['question'])
-    # add questionmark after each question
-    question_array = np.char.add(question_array, '?')
-    # make first letter a capital
-    question_array = np.char.capitalize(question_array)
-
-    # make a dataframe
-    df = pd.DataFrame({'question': question_array, 'answer': truth_array})
-    return df, 'question', 'answer'
-
-def load_data_questions_1000_all():
-    # save data in data folder
-    if not os.path.exists('questions_1000_all.json'):
-        os.system('wget -P data https://raw.githubusercontent.com/LoryPack/LLM-LieDetector/main/data/raw_questions/questions_1000_all.json')
-
-    # load json file
-    with open('data/questions_1000_all.json') as json_file:
-        data = json.load(json_file)
-
-    # convert json to dataframe
-    data_frame = pd.DataFrame(data).T
-    return data_frame, 'statement', 'answer'
 
 
 def generate(model, tokenizer, text, max_new_tokens=5, do_sample=False):
+    text = list(text)
     inputs = tokenizer(text, return_tensors="pt", padding=True).to(model.device)
     _, input_length = inputs["input_ids"].shape
     outputs = model.generate(**inputs, max_new_tokens=max_new_tokens, do_sample=do_sample, pad_token_id=tokenizer.eos_token_id)
@@ -120,33 +22,15 @@ def batchify(lst, batch_size):
         yield lst[i:i + batch_size]
 
 
-def check_statements(model, tokenizer, data, statement_tag="statement", answer_tag="answer", format="{}", max_new_tokens=5, batch_size=10):
-    correct = np.zeros(len(data[statement_tag]))
-    ctr = 0
-    # Calculate total number of batches for progress bar
-    total_batches = len(data[statement_tag]) // batch_size + (0 if len(data[statement_tag]) % batch_size == 0 else 1)
-    answers = []
-    # Wrap the zip function with tqdm for the progress bar
-    for batch, batch_gt in tqdm(zip(batchify(data[statement_tag], batch_size), batchify(data[answer_tag], batch_size)), total=total_batches):
-        batch = list(batch.apply(lambda x: format.format(x)))
-        batch_answers = generate(model, tokenizer, batch, max_new_tokens)
-        for i, answer in enumerate(batch_answers):
-            if batch_gt.iloc[i].lower() in answer.lower():
-                correct[ctr] = 1
-            ctr += 1
-            answers.append(answer)
-    return correct, answers
-
-
-def get_hidden(model, tokenizer, module_names, data, statement_tag="statement", format="{}", batch_size=10, token_position=-1):
-
-    total_batches = len(data[statement_tag]) // batch_size + (0 if len(data[statement_tag]) % batch_size == 0 else 1)
+def get_hidden(model, tokenizer, module_names, data, batch_size=10, token_position=-1):
+    size = len(data)
+    total_batches = size // batch_size + (0 if size % batch_size == 0 else 1)
     # list of empty tensors for hidden states
     hidden_states = [None] * len(module_names)
     with torch.no_grad(), TraceDict(model, module_names) as return_dict:
 
-        for batch in tqdm(batchify(data[statement_tag], batch_size), total=total_batches):
-            batch = list(batch.apply(lambda x: format.format(x)))
+        for batch in tqdm(batchify(data, batch_size), total=total_batches):
+            batch = list(batch)
             inputs = tokenizer(batch, return_tensors="pt", padding=True).to(model.device)
             _ = model(**inputs)
             for i, module_name in enumerate(module_names):
@@ -223,70 +107,6 @@ def prepare_data(hidden_states_lie, hidden_states_truth, train_perc=0.8):
     y_train = y_train[indices]
 
     return X_train, X_test, y_train, y_test
-
-def prepare_data_diffs(hidden_states_lie, hidden_states_truth, train_perc=0.8):
-
-    hidden_states_truth_diffs = {}
-    hidden_states_lie_diffs = {}
-
-    keys = list(hidden_states_lie.keys())
-    for i in range(len(keys) - 1):
-        # Calculate the difference between adjacent tensors
-        hidden_states_lie_diffs[keys[i]] = hidden_states_lie[keys[i + 1]] - hidden_states_lie[keys[i]]
-        hidden_states_truth_diffs[keys[i]] = hidden_states_truth[keys[i + 1]] - hidden_states_truth[keys[i]]
-
-
-    num_samples = hidden_states_lie_diffs[next(iter(hidden_states_lie))].shape[0]
-
-    # indices for train/test split
-    np.random.seed(0)
-    indices = np.random.permutation(num_samples)
-    train_indices = indices[:int(train_perc*num_samples)]
-    test_indices = indices[int(train_perc*num_samples):]
-
-    # train/test split
-    hidden_states_lie_train = {k: v[train_indices] for k, v in hidden_states_lie_diffs.items()}
-    hidden_states_lie_test = {k: v[test_indices] for k, v in hidden_states_lie_diffs.items()}
-    hidden_states_truth_train = {k: v[train_indices] for k, v in hidden_states_truth_diffs.items()}
-    hidden_states_truth_test = {k: v[test_indices] for k, v in hidden_states_truth_diffs.items()}
-
-    # concatenate lies and truth for each key and make labels
-    X_train = {k: np.concatenate([hidden_states_lie_train[k], hidden_states_truth_train[k]], axis=0) for k in hidden_states_lie_train.keys()}
-    X_test = {k: np.concatenate([hidden_states_lie_test[k], hidden_states_truth_test[k]], axis=0) for k in hidden_states_lie_test.keys()}
-
-    y_train = np.concatenate([np.zeros(len(train_indices)), np.ones(len(train_indices))])
-    y_test = np.concatenate([np.zeros(len(test_indices)), np.ones(len(test_indices))])
-
-    # shuffle train data
-    indices = np.random.permutation(len(y_train))
-    X_train = {k: v[indices] for k, v in X_train.items()}
-    y_train = y_train[indices]
-
-    return X_train, X_test, y_train, y_test
-
-
-def calc_cross_entropy(module_name, hidden_states):
-    loss = torch.nn.CrossEntropyLoss()
-    # iterare through dictionary and calculate cross entropy
-    target = hidden_states[module_name].softmax(dim=1)
-    cross_entropy = {}
-    for k, v in hidden_states.items():
-        if k==module_name:
-            continue
-        # calculate cross entropy between module_name and k
-        cross_entropy[k] = loss(v, target)
-        
-    return cross_entropy
-
-def calc_KL_divergence(target, hidden_states):
-    criterion = torch.nn.KLDivLoss(reduction='batchmean')
-    # iterare through dictionary and calculate cross entropy
-    kl = {}
-    for k, v in hidden_states.items():
-        # calculate cross entropy between module_name and k
-        kl[k] = criterion(F.log_softmax(v, dim=1), target)
-    return kl
-
 
 def unembedd(model, tensors):
     device = model.device

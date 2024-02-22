@@ -1,20 +1,23 @@
 import random
 import json
 import re
+import os
 # load txt file
 def load_txt(file_path):
     with open(file_path, 'r') as file:
         return file.read().splitlines()
 
 def main():
+    # print current working directory
+    data_dir = os.getcwd() + '/meta_info_processing/data'
 
-    scenes = load_txt('data/raw_burgler_data/scenes.txt')
-    intruders = load_txt('data/raw_burgler_data/intruders.txt')
-    guests = load_txt('data/raw_burgler_data/guests.txt')
-    places = load_txt('data/raw_burgler_data/places.txt')
-    valuable_items = load_txt('data/raw_burgler_data/valuable_items.txt')
-    worthless_items = load_txt('data/raw_burgler_data/worthless_items.txt')
-    places_clean = load_txt('data/raw_burgler_data/places_clean.txt')
+    scenes = load_txt(f'{data_dir}/raw_burgler_data/scenes.txt')
+    intruders = load_txt(f'{data_dir}/raw_burgler_data/intruders.txt')
+    guests = load_txt(f'{data_dir}/raw_burgler_data/guests.txt')
+    places = load_txt(f'{data_dir}/raw_burgler_data/places.txt')
+    valuable_items = load_txt(f'{data_dir}/raw_burgler_data/valuable_items.txt')
+    worthless_items = load_txt(f'{data_dir}/raw_burgler_data/worthless_items.txt')
+    places_clean = load_txt(f'{data_dir}/raw_burgler_data/places_clean.txt')
 
     dataset = []
 
@@ -49,11 +52,11 @@ def main():
 
         
     # save dataset as json file
-    with open('data/burglar_dataset.json', 'w') as file:
+    with open(f'{data_dir}/burglar_dataset.json', 'w') as file:
         json.dump(dataset, file, indent=4)
 
     # load dataset
-    with open('data/burglar_dataset.json', 'r') as file:
+    with open(f'{data_dir}/burglar_dataset.json', 'r') as file:
         dataset = json.load(file)
 
     # make into a dataframe
