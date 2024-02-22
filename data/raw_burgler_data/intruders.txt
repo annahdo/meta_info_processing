@@ -1,0 +1,50 @@
+a thief
+a burglar
+a robber
+a trespasser
+a vandal
+a intruder
+a prowler
+a raider
+a looter
+a mugger
+a bandit
+a housebreaker
+a criminal
+a felon
+a pickpocket
+a shoplifter
+a hacker
+a scoundrel
+a rogue
+a villain
+a miscreant
+a perpetrator
+a sneak thief
+a break-in artist
+a cat burglar
+a night raider
+a plunderer
+a ruffian
+a marauder
+a assailant
+a aggressor
+a snatcher
+a swindler
+a con artist
+a burglary suspect
+a home invader
+a trespassing suspect
+a property invader
+a larcenist
+a kleptomaniac
+a pilferer
+a saboteur
+a spy
+a enemy agent
+a intrusion suspect
+a heist planner
+a jewel thief
+a safe cracker
+a identity thief
+a data thief
