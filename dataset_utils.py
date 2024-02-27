@@ -30,8 +30,12 @@ def load_data_burglar():
         'lie_scenario' : np.array(df['burglar_scene']),
         'truth_scenario' : np.array(df['harmless_scene']),
         'true_answer': np.array(df['answer_valuable_item']),
-        'false_answer_tag': np.array(df['answer_worthless_item'])
+        'false_answer': np.array(df['answer_worthless_item'])
     }
+
+    # add all cols of df to dict_burglar
+    for col in df.columns:
+        dict_burglar[col] = np.array(df[col])
 
     return dict_burglar
 
@@ -123,17 +127,21 @@ def get_selected_data(model, tokenizer, dataset, max_new_tokens=5, batch_size=64
     # check if file exists
     if os.path.isfile(f"results/{dataset_name}_success.npy"):
         success = np.load(f"results/{dataset_name}_success.npy")
-
+        dataset['success'] = success
         _, selected_lies = check_statements(model, tokenizer, dataset['lie_scenario'][success], dataset['true_answer'][success], 
                                             max_new_tokens=max_new_tokens, batch_size=batch_size)
+        
+        _, truths_gen = check_statements(model, tokenizer, dataset['truth_scenario'][success], dataset['true_answer'][success], 
+                                     max_new_tokens=max_new_tokens, batch_size=batch_size)
         selected_lies = np.array(selected_lies)
+        selected_truths = np.array(truths_gen)
 
     else:
         # truths_org, _ = check_statements(model, tokenizer, dataset, format=no_format, statement_tag=question_tag, answer_tag=answer_tag)
         lies, lies_gen = check_statements(model, tokenizer, dataset['lie_scenario'], dataset['true_answer'], 
                                           max_new_tokens=max_new_tokens, batch_size=batch_size)
         lies = 1-lies
-        truths, _ = check_statements(model, tokenizer, dataset['truth_scenario'], dataset['true_answer'], 
+        truths, truths_gen = check_statements(model, tokenizer, dataset['truth_scenario'], dataset['true_answer'], 
                                      max_new_tokens=max_new_tokens, batch_size=batch_size)
 
         print(f"dataset: {dataset_name}")
@@ -150,8 +158,9 @@ def get_selected_data(model, tokenizer, dataset, max_new_tokens=5, batch_size=64
         np.save(f"results/{dataset_name}_success.npy", success)
 
         selected_lies = np.array(lies_gen)[success]
+        selected_truths = np.array(truths_gen)[success]
         dataset['success'] = success
         
     print(f"# questions where lying and truth telling was successful: {len(selected_lies)}")
 
-    return selected_lies
+    return selected_truths, selected_lies

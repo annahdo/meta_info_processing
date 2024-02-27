@@ -23,7 +23,7 @@ def main():
 
     dataset_size = 2000
     random.seed(0)
-    for i in range(dataset_size):
+    for _ in range(dataset_size):
         scene = random.choice(scenes)
         intruder = random.choice(intruders)
         place = random.choice(places)
@@ -45,7 +45,9 @@ def main():
                                         room_worthless_item=room_worthless_item)
 
         dict_burglar = {'burglar_scene': burglar_scene, 'harmless_scene': harmless_scene,
-                        'answer_valuable_item': answer_valuable_item, 'answer_worthless_item': answer_worthless_item}
+                        'answer_valuable_item': answer_valuable_item, 'answer_worthless_item': answer_worthless_item, 'room_worthless_item': room_worthless_item,
+                        'intruder': intruder, 'trusted_person': trusted_person, 'room_valuable_item': room_valuable_item, 'valuable_item': valuable_item,
+                        'worthless_item': worthless_item, 'scene': scene}
         
         # add to dataset
         dataset.append(dict_burglar)
