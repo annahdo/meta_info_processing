@@ -66,6 +66,7 @@ def load_data_boolq(split='train'):
 
 
     dataset_dict = {
+        'org_data': question_array,
         'dataset_name': 'BoolQ', 
         'lie_scenario' : np.array(lie_scenario),
         'truth_scenario' : np.array(thruth_scenario),
@@ -96,6 +97,7 @@ def load_data_questions_1000_all():
     true_answer = data_frame['answer']
 
     dataset_dict = {
+        'org_data': np.array(data_frame['statement']),
         'dataset_name': 'Questions1000', 
         'lie_scenario' : np.array(lie_scenario),
         'truth_scenario' : np.array(thruth_scenario),
