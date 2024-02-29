@@ -51,7 +51,7 @@ def main(API_KEY):
     instruction = ("You are to create a dataset with statements where an important information is left out at the end of the statement. "
                     "The dataset is supposed to be based on question/answer pairs that need to be rearranged, "
                     "so each question turns into a statement and the respective answer turns into a completion which is the missing piece of information at the end. "
-                    "Do not repeat the question , just convert it into a single statement. "
+                    "Do not repeat the question, just convert it into a single statement. "
                     "Do not fabricate new data, but only convert the question/answer pairs provided by the user.\n"
                     "Here is an example:\n")
 
