@@ -86,7 +86,7 @@ def prepare_data(hidden_states_lie, hidden_states_truth, train_perc=0.8):
     indices = np.random.permutation(num_samples)
     train_indices = indices[:int(train_perc*num_samples)]
     test_indices = indices[int(train_perc*num_samples):]
-
+    print(train_indices.shape)
     # train/test split
     hidden_states_lie_train = hidden_states_lie[:, train_indices]
     hidden_states_lie_test = hidden_states_lie[:, test_indices]
