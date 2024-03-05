@@ -50,6 +50,33 @@ def get_hidden(model, tokenizer, module_names, data, batch_size=10, token_positi
 
     return hidden_states
 
+def get_hidden_from_tokens(model, module_names, data, batch_size=10, token_position=-1):
+    size = len(data)
+    total_batches = size // batch_size + (0 if size % batch_size == 0 else 1)
+    # list of empty tensors for hidden states
+    hidden_states = [None] * len(module_names)
+    with torch.no_grad(), TraceDict(model, module_names) as return_dict:
+
+        for input_ids, attention_mask in tqdm(zip(batchify(data['input_ids'], batch_size), batchify(data['attention_mask'], batch_size)), total=total_batches):
+            _ = model(input_ids=input_ids, attention_mask=attention_mask)
+            for i, module_name in enumerate(module_names):
+                # check for tuple output (in residual stream usually)
+                if isinstance(return_dict[module_name].output, tuple):
+                    output = return_dict[module_name].output[0][:, token_position, :].detach().cpu()
+                else:
+                    output = return_dict[module_name].output[:, token_position, :].detach().cpu()
+
+                if hidden_states[i] is None:
+                    hidden_states[i] = output
+                else:
+                    hidden_states[i] = torch.cat([hidden_states[i], output], dim=0)
+
+        # convert list to tensor with new dimension at start
+        hidden_states = torch.cat([t.unsqueeze(0) for t in hidden_states], dim=0)
+
+    return hidden_states
+
+
 
 def train_logistic_regression(X_train, y_train):
     scalers = []
