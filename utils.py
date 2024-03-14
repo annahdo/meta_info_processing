@@ -15,15 +15,16 @@ def generate_tokens(model, tokenizer, data, max_new_tokens=10, batch_size=64, do
     output_tokens = {'input_ids': [], 'attention_mask': []}
     answer_tokens = []
     max_len = 0
+    pad_token_id = tokenizer.eos_token_id
     for batch in tqdm(batchify(data, batch_size), total=total_batches):
         inputs = tokenizer(list(batch), return_tensors="pt", padding=True, truncation=True, max_length=512)
-        outputs = model.generate(**inputs.to(device), max_new_tokens=max_new_tokens, do_sample=do_sample, pad_token_id=tokenizer.eos_token_id).detach().cpu()
+        outputs = model.generate(**inputs.to(device), max_new_tokens=max_new_tokens, do_sample=do_sample, pad_token_id=pad_token_id).detach().cpu()
         n, il = inputs['input_ids'].shape
         _, ol = outputs.shape
         max_len = max(max_len, ol)
         output_tokens['input_ids'].extend(outputs)
         # define attention mask
-        attention_mask = torch.cat([inputs['attention_mask'].detach().cpu().clone(), torch.ones([n, ol-il])], dim=1).long()
+        attention_mask = torch.where(outputs!=pad_token_id, 1, 0).long()
         output_tokens['attention_mask'].extend(attention_mask)
         answer_tokens.extend(outputs[:, il:])
 
@@ -170,4 +171,5 @@ def prepare_data(hidden_states_lie, hidden_states_truth, train_perc=0.8):
 
 def unembedd(model, tensors):
     device = model.device
+    model.eval()
     return model.lm_head(model.model.norm(tensors.unsqueeze(0).to(device))).squeeze().detach().cpu().float()
