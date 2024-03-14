@@ -7,6 +7,39 @@ from sklearn.metrics import accuracy_score
 from sklearn.preprocessing import StandardScaler
 
 
+
+def generate_tokens(model, tokenizer, data, max_new_tokens=10, batch_size=64, do_sample=False):
+    assert tokenizer.padding_side == "left", "Not implemented for padding_side='right'"
+    device = model.device
+    total_batches = len(data) // batch_size
+    output_tokens = {'input_ids': [], 'attention_mask': []}
+    answer_tokens = []
+    max_len = 0
+    for batch in tqdm(batchify(data, batch_size), total=total_batches):
+        inputs = tokenizer(list(batch), return_tensors="pt", padding=True, truncation=True, max_length=512)
+        outputs = model.generate(**inputs.to(device), max_new_tokens=max_new_tokens, do_sample=do_sample, pad_token_id=tokenizer.eos_token_id).detach().cpu()
+        n, il = inputs['input_ids'].shape
+        _, ol = outputs.shape
+        max_len = max(max_len, ol)
+        output_tokens['input_ids'].extend(outputs)
+        # define attention mask
+        attention_mask = torch.cat([inputs['attention_mask'].detach().cpu().clone(), torch.ones([n, ol-il])], dim=1).long()
+        output_tokens['attention_mask'].extend(attention_mask)
+        answer_tokens.extend(outputs[:, il:])
+
+    # convert to tensor
+    output_token_tensor = torch.ones([len(data), max_len], dtype=torch.long) * tokenizer.pad_token_id
+    attention_mask_tensor = torch.zeros([len(data), max_len], dtype=torch.long)
+
+    for i, (input_ids, attention_mask) in enumerate(zip(output_tokens['input_ids'], output_tokens['attention_mask'])):
+        output_token_tensor[i, -len(input_ids):] = input_ids
+        attention_mask_tensor[i, -len(attention_mask):] = attention_mask
+
+    output_tokens = {'input_ids': output_token_tensor, 'attention_mask': attention_mask_tensor}
+
+    return output_tokens, answer_tokens
+
+
 def generate(model, tokenizer, text, max_new_tokens=5, do_sample=False):
     text = list(text)
     inputs = tokenizer(text, return_tensors="pt", padding=True).to(model.device)
@@ -51,14 +84,15 @@ def get_hidden(model, tokenizer, module_names, data, batch_size=10, token_positi
     return hidden_states
 
 def get_hidden_from_tokens(model, module_names, data, batch_size=10, token_position=-1):
-    size = len(data)
+    size = len(data['input_ids'])
     total_batches = size // batch_size + (0 if size % batch_size == 0 else 1)
+    device = model.device
     # list of empty tensors for hidden states
     hidden_states = [None] * len(module_names)
     with torch.no_grad(), TraceDict(model, module_names) as return_dict:
 
         for input_ids, attention_mask in tqdm(zip(batchify(data['input_ids'], batch_size), batchify(data['attention_mask'], batch_size)), total=total_batches):
-            _ = model(input_ids=input_ids, attention_mask=attention_mask)
+            _ = model(input_ids=input_ids.to(device), attention_mask=attention_mask.to(device))
             for i, module_name in enumerate(module_names):
                 # check for tuple output (in residual stream usually)
                 if isinstance(return_dict[module_name].output, tuple):
