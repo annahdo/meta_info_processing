@@ -112,8 +112,8 @@ def load_data_boolq(lie_format, truth_format, split='train'):
 
 def load_data_questions_1000_all(lie_format, truth_format):
     # save data in data folder
-    if not os.path.exists('questions_1000_all.json'):
-        os.system('wget -P data https://raw.githubusercontent.com/LoryPack/LLM-LieDetector/main/data/raw_questions/questions_1000_all.json')
+    if not os.path.exists('data/questions_1000_all.json'):
+        os.system('wget -q -O data/questions_1000_all.json https://raw.githubusercontent.com/LoryPack/LLM-LieDetector/main/data/raw_questions/questions_1000_all.json')
 
     # load json file
     with open('data/questions_1000_all.json') as json_file:
@@ -243,11 +243,11 @@ def get_overlap_truth_lies(model, tokenizer, dataset, max_new_tokens=10, batch_s
     # check if the generated answers contain the ground truth
     success_truth = check_answer(tokenizer, answer_tokens_truth, dataset['true_answer'], batch_size=batch_size)
     print(f"Size of dataset {dataset['dataset_name']}: {len(dataset['true_answer'])}")
-    print(f"Success rate when generating truths: {np.mean(success_truth):.2f}")
+    print(f"Success rate when generating truths: {np.mean(success_truth)*100:.2f}%")
     success_lie = check_answer(tokenizer, answer_tokens_lie, dataset['true_answer'], batch_size=batch_size)
-    print(f"Success rate when generating lies:   {np.mean(success_lie):.2f}")
+    print(f"Success rate when generating lies:   {100-np.mean(success_lie)*100:.2f}%")
     overlap = success_truth & ~success_lie
-    print(f"Overlap: {np.mean(overlap):.2f}")
+    print(f"Overlap: {np.mean(overlap)*100:.2f}%")
     dataset['success'] = overlap
 
     # select only data where overlap is 1
