@@ -95,7 +95,17 @@ def main(API_KEY):
     questions = [questions[i] for i in indices]
     answers = [answers[i] for i in indices]
 
-        # Initialize an empty list to hold dictionaries
+    # create a list of dicts to hold the data
+    dataset = []
+    for q, a in zip(questions, answers):
+        dataset.append({"question": q, "answer": a})
+
+    # save as json
+    with open('data/freebase_questions.json', 'w') as f:
+        json.dump(dataset, f, indent=4)
+
+
+    # Initialize an empty list to hold dictionaries
     all_data = []
 
     # iterate through dataset and process batch at the time
