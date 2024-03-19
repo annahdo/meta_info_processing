@@ -17,8 +17,8 @@ def generate_tokens(model, tokenizer, data, max_new_tokens=10, batch_size=64, do
     max_len = 0
     pad_token_id = tokenizer.eos_token_id
     for batch in tqdm(batchify(data, batch_size), total=total_batches):
-        inputs = tokenizer(list(batch), return_tensors="pt", padding=True, truncation=True, max_length=512)
-        outputs = model.generate(**inputs.to(device), max_new_tokens=max_new_tokens, do_sample=do_sample, pad_token_id=pad_token_id).detach().cpu()
+        inputs = tokenizer(list(batch), return_tensors="pt", padding=True).to(device)
+        outputs = model.generate(**inputs, max_new_tokens=max_new_tokens, do_sample=do_sample, pad_token_id=pad_token_id).detach().cpu()
         n, il = inputs['input_ids'].shape
         _, ol = outputs.shape
         max_len = max(max_len, ol)
