@@ -17,8 +17,8 @@ def generate_tokens(model, tokenizer, data, max_new_tokens=10, batch_size=64, do
     max_len = 0
     pad_token_id = tokenizer.eos_token_id
     for batch in tqdm(batchify(data, batch_size), total=total_batches):
-        inputs = tokenizer(list(batch), return_tensors="pt", padding=True, truncation=True, max_length=512)
-        outputs = model.generate(**inputs.to(device), max_new_tokens=max_new_tokens, do_sample=do_sample, pad_token_id=pad_token_id, temperature=0).detach().cpu()
+        inputs = tokenizer(list(batch), return_tensors="pt", padding=True).to(device)
+        outputs = model.generate(**inputs, max_new_tokens=max_new_tokens, do_sample=do_sample, pad_token_id=pad_token_id).detach().cpu()
         n, il = inputs['input_ids'].shape
         _, ol = outputs.shape
         max_len = max(max_len, ol)
@@ -93,8 +93,8 @@ def get_hidden_from_tokens(model, module_names, data, batch_size=10, token_posit
     with torch.no_grad(), TraceDict(model, module_names) as return_dict:
 
         for input_ids, attention_mask in tqdm(zip(batchify(data['input_ids'], batch_size), batchify(data['attention_mask'], batch_size)), total=total_batches):
-            #_ = model(input_ids=input_ids.to(device), attention_mask=attention_mask.to(device))
-            _ = model.generate(input_ids=input_ids.to(device), attention_mask=attention_mask.to(device), max_new_tokens=1, do_sample=False, pad_token_id=model.config.pad_token_id, temperature=0)
+            _ = model(input_ids=input_ids.to(device), attention_mask=attention_mask.to(device))
+            #_ = model.generate(input_ids=input_ids.to(device), attention_mask=attention_mask.to(device), max_new_tokens=1, do_sample=False, pad_token_id=model.config.pad_token_id, temperature=0)
             for i, module_name in enumerate(module_names):
                 # check for tuple output (in residual stream usually)
                 if isinstance(return_dict[module_name].output, tuple):
