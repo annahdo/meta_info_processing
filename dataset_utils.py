@@ -163,9 +163,9 @@ def load_data_statements_1000(lie_format, truth_format):
 
     org_data = np.array(data_frame['statement'])
 
-    truth_scenario = np.array([truth_format.format(x+" ") for x in org_data])
+    truth_scenario = np.array([truth_format.format(x) for x in org_data])
     # apply lie format
-    lie_scenario = np.array([lie_format.format(x+" ") for x in org_data])
+    lie_scenario = np.array([lie_format.format(x) for x in org_data])
     true_answer = np.array(data_frame['answer'])
 
     dataset_dict = {
@@ -307,15 +307,16 @@ def check_answer(tokenizer, answer_tokens, GT, batch_size=64):
 
 def get_overlap_truth_lies(model, tokenizer, dataset, max_new_tokens=10, batch_size=64):
     # generate tokens for truths and lies
+    print(f"Size of dataset {dataset['dataset_name']}: {len(dataset['true_answer'])}")
     output_tokens_truth, answer_tokens_truth = generate_tokens(model, tokenizer, dataset['truth_scenario'], 
                                                                max_new_tokens=max_new_tokens, batch_size=batch_size, do_sample=False)
-    output_tokens_lie, answer_tokens_lie = generate_tokens(model, tokenizer, dataset['lie_scenario'], 
-                                                           max_new_tokens=max_new_tokens, batch_size=batch_size, do_sample=False)
-
     # check if the generated answers contain the ground truth
     success_truth = check_answer(tokenizer, answer_tokens_truth, dataset['true_answer'], batch_size=batch_size)
-    print(f"Size of dataset {dataset['dataset_name']}: {len(dataset['true_answer'])}")
     print(f"Success rate when generating truths: {np.mean(success_truth)*100:.2f}%")
+
+    output_tokens_lie, answer_tokens_lie = generate_tokens(model, tokenizer, dataset['lie_scenario'], 
+                                                           max_new_tokens=max_new_tokens, batch_size=batch_size, do_sample=False)
+    # check if the generated answers contain the ground truth
     success_lie = check_answer(tokenizer, answer_tokens_lie, dataset['true_answer'], batch_size=batch_size)
     print(f"Success rate when generating lies:   {100-np.mean(success_lie)*100:.2f}%")
     overlap = success_truth & ~success_lie
