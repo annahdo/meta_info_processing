@@ -174,3 +174,10 @@ def unembedd(model, tensors):
     device = model.device
     model.eval()
     return model.lm_head(model.model.norm(tensors.unsqueeze(0).to(device))).squeeze().detach().cpu().float()
+
+def unembedd_tuned_lens(model, tensors, lens):
+    device = model.device
+    model.eval()
+    res = lens(tensors.unsqueeze(0).to(device))
+    res = model.model.norm(res)
+    return model.lm_head(res).squeeze().detach().cpu().float()
