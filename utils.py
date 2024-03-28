@@ -170,7 +170,7 @@ def prepare_data(hidden_states_lie, hidden_states_truth, train_perc=0.8):
 
     return X_train, X_test, y_train, y_test
 
-def unembedd(model, tensors):
+def unembed(model, tensors):
     device = model.device
     model.eval()
     return model.lm_head(model.model.norm(tensors.unsqueeze(0).to(device))).squeeze().detach().cpu().float()
@@ -183,7 +183,7 @@ def unembedd(model, tensors):
 #     # in the paper. By parametrizing it this way we ensure that weight decay
 #     # regularizes the transform toward the identity, not the zero transformation.
 #     return h + self[idx](h)
-def unembedd_tuned_lens(model, tensors, lens):
+def unembed_tuned_lens(model, tensors, lens):
     device = model.device
     model.eval()
     tensors = tensors.unsqueeze(0).to(device)
