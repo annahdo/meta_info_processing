@@ -175,9 +175,18 @@ def unembedd(model, tensors):
     model.eval()
     return model.lm_head(model.model.norm(tensors.unsqueeze(0).to(device))).squeeze().detach().cpu().float()
 
+# from tuned_lens/nn/lenses.py: lens transformation is added!!!
+#
+# def transform_hidden(self, h: th.Tensor, idx: int) -> th.Tensor:
+#     """Transform hidden state from layer `idx`."""
+#     # Note that we add the translator output residually, in contrast to the formula
+#     # in the paper. By parametrizing it this way we ensure that weight decay
+#     # regularizes the transform toward the identity, not the zero transformation.
+#     return h + self[idx](h)
 def unembedd_tuned_lens(model, tensors, lens):
     device = model.device
     model.eval()
-    res = lens(tensors.unsqueeze(0).to(device))
+    tensors = tensors.unsqueeze(0).to(device)
+    res = tensors + lens(tensors)
     res = model.model.norm(res)
     return model.lm_head(res).squeeze().detach().cpu().float()
