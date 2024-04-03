@@ -185,9 +185,8 @@ def unembed_logit_lens(model, tensors):
 #     return h + self[idx](h)
 def unembed(model, tensors, lens=None):
     device = model.device
-    model.eval()
     tensors = tensors.unsqueeze(0).to(device)
     if lens is not None:
         tensors = tensors + lens(tensors)
-    res = model.model.norm(res)
-    return model.lm_head(res).squeeze().detach().cpu().float()
+    tensors = model.model.norm(tensors)
+    return model.lm_head(tensors).squeeze().detach().cpu().float()
