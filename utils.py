@@ -66,7 +66,7 @@ def get_hidden(model, tokenizer, module_names, data, batch_size=10, token_positi
         for batch in tqdm(batchify(data, batch_size), total=total_batches):
             batch = list(batch)
             inputs = tokenizer(batch, return_tensors="pt", padding=True).to(model.device)
-            _ = model.generate(**inputs, max_new_tokens=1, do_sample=False, pad_token_id=tokenizer.eos_token_id)
+            _ = model(**inputs)
             for i, module_name in enumerate(module_names):
                 # check for tuple output (in residual stream usually)
                 if isinstance(return_dict[module_name].output, tuple):
@@ -190,3 +190,34 @@ def unembed(model, tensors, lens=None):
         tensors = tensors + lens(tensors)
     tensors = model.model.norm(tensors)
     return model.lm_head(tensors).squeeze().detach().cpu().float()
+
+
+class LRProbe(torch.nn.Module):
+    def __init__(self, d_in, device='cuda', precision=torch.float16):
+        super().__init__()
+        self.net = torch.nn.Sequential(
+            torch.nn.Linear(d_in, 1, bias=False),
+            torch.nn.Sigmoid()
+        ).to(device).to(precision)
+
+    def pred(self, x):
+        self.net.eval()
+        # normalize acts
+        return self.net(x).squeeze()
+
+    def forward(self, x):
+        return self.net(x).squeeze()
+    
+    def train(self, acts, labels, lr=0.001, weight_decay=0.1, epochs=1000, device='cuda', batch_size=32):
+        # normalize acts
+        mean = acts.mean(0)
+        acts = acts - mean
+        self.net.train()
+
+        opt = torch.optim.AdamW(self.net.parameters(), lr=lr, weight_decay=weight_decay)
+        for _ in tqdm(range(epochs)):
+            for i in range(0, acts.shape[0], batch_size):
+                opt.zero_grad()
+                loss = torch.nn.BCELoss()(self.forward(acts[i:i+64]), labels[i:i+64])
+                loss.backward()
+                opt.step()
