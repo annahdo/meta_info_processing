@@ -158,7 +158,16 @@ def prepare_data(hidden_states_lie, hidden_states_truth, train_perc=0.8):
 
     # concatenate lies and truth for each key and make labels
     X_train = np.concatenate([hidden_states_lie_train, hidden_states_truth_train], axis=1)
+
+    # normalize data
+    mean = train_data.mean(axis=1)
+    std = train_data.std(axis=1)
+    X_train -= mean
+    X_train /= std
+
     X_test = np.concatenate([hidden_states_lie_test, hidden_states_truth_test], axis=1)
+    X_test -= mean
+    X_test /= std
 
     y_train = np.concatenate([np.zeros(len(train_indices)), np.ones(len(train_indices))])
     y_test = np.concatenate([np.zeros(len(test_indices)), np.ones(len(test_indices))])
@@ -193,31 +202,51 @@ def unembed(model, tensors, lens=None):
 
 
 class LRProbe(torch.nn.Module):
-    def __init__(self, d_in, device='cuda', precision=torch.float16):
+    def __init__(self, d_in, device='cuda', precision=torch.float32):
         super().__init__()
+        self.device = device
+        self.precision = precision
         self.net = torch.nn.Sequential(
             torch.nn.Linear(d_in, 1, bias=False),
             torch.nn.Sigmoid()
-        ).to(device).to(precision)
+        )
+        self.net = self.net.to(device=device, dtype=precision)
 
-    def pred(self, x):
-        self.net.eval()
-        # normalize acts
-        return self.net(x).squeeze()
 
     def forward(self, x):
         return self.net(x).squeeze()
-    
-    def train(self, acts, labels, lr=0.001, weight_decay=0.1, epochs=1000, device='cuda', batch_size=32):
+
+    def test(self, acts, labels, batch_size=64):
         # normalize acts
-        mean = acts.mean(0)
-        acts = acts - mean
+        acts = acts - acts.mean(0)
+        acts = acts/(acts.std(0)+1e-11)
+
+        self.net.eval()
+        correct = 0
+        with torch.no_grad():
+            for i in range(0, acts.shape[0], batch_size):
+                acts_batch = acts[i:i+batch_size].to(device=self.device, dtype=self.precision)
+                labels_batch = labels[i:i+batch_size].to(device=self.device, dtype=self.precision)
+                pred = self.forward(acts_batch)
+                correct += ((pred > 0.5) == labels_batch).sum()
+
+        acc = correct.item() / acts.shape[0]
+        return acc
+    
+    def train(self, acts, labels, lr=0.001, weight_decay=0.1, epochs=10, batch_size=64):
+        # normalize acts
+        acts = acts - acts.mean(0)
+        acts = acts/(acts.std(0)+1e-11)
+
         self.net.train()
 
         opt = torch.optim.AdamW(self.net.parameters(), lr=lr, weight_decay=weight_decay)
-        for _ in tqdm(range(epochs)):
+        for _ in range(epochs):
             for i in range(0, acts.shape[0], batch_size):
+                acts_batch = acts[i:i+batch_size].to(device=self.device, dtype=self.precision)
+                labels_batch = labels[i:i+batch_size].to(device=self.device, dtype=self.precision)
                 opt.zero_grad()
-                loss = torch.nn.BCELoss()(self.forward(acts[i:i+64]), labels[i:i+64])
+
+                loss = torch.nn.BCELoss()(self.forward(acts_batch), labels_batch)
                 loss.backward()
                 opt.step()
