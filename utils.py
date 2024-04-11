@@ -159,15 +159,7 @@ def prepare_data(hidden_states_lie, hidden_states_truth, train_perc=0.8):
     # concatenate lies and truth for each key and make labels
     X_train = np.concatenate([hidden_states_lie_train, hidden_states_truth_train], axis=1)
 
-    # normalize data
-    mean = train_data.mean(axis=1)
-    std = train_data.std(axis=1)
-    X_train -= mean
-    X_train /= std
-
     X_test = np.concatenate([hidden_states_lie_test, hidden_states_truth_test], axis=1)
-    X_test -= mean
-    X_test /= std
 
     y_train = np.concatenate([np.zeros(len(train_indices)), np.ones(len(train_indices))])
     y_test = np.concatenate([np.zeros(len(test_indices)), np.ones(len(test_indices))])
@@ -178,6 +170,43 @@ def prepare_data(hidden_states_lie, hidden_states_truth, train_perc=0.8):
     y_train = y_train[indices]
 
     return X_train, X_test, y_train, y_test
+
+def prep_data(data, labels, train_perc):
+    # split into train and test with equal numbers of each class
+    labels = np.array(labels)
+    pos_indices = np.where(labels == 1)[0]
+    neg_indices = np.where(labels == 0)[0]
+
+    # shuffle indices
+    np.random.seed(0)
+    np.random.shuffle(pos_indices)
+    np.random.shuffle(neg_indices)
+
+    # split into train and test
+    train_indices = np.concatenate([pos_indices[:int(train_perc * len(pos_indices))], neg_indices[:int(train_perc * len(neg_indices))]])
+    test_indices = np.concatenate([pos_indices[int(train_perc * len(pos_indices)):], neg_indices[int(train_perc * len(neg_indices)):]])                               
+
+    # shuffle train indices
+    np.random.shuffle(train_indices)
+
+    train_data = data[:, train_indices, :]
+    test_data = data[:, test_indices, :]
+    train_labels = np.array(labels)[train_indices]
+    test_labels = np.array(labels)[test_indices]
+
+    # normalize data
+    mean = train_data.mean(axis=1)[:, None, :]
+    std = train_data.std(axis=1)[:, None, :] + 1e-10
+    train_data = (train_data - mean) / std
+    test_data = (test_data - mean) / std
+
+    # turn labels into torch tensors
+    train_labels = torch.tensor(train_labels)
+    test_labels = torch.tensor(test_labels)
+
+    return train_data, test_data, train_labels, test_labels
+
+
 
 def unembed_logit_lens(model, tensors):
     device = model.device
@@ -202,15 +231,15 @@ def unembed(model, tensors, lens=None):
 
 
 class LRProbe(torch.nn.Module):
-    def __init__(self, d_in, device='cuda', precision=torch.float32):
+    def __init__(self, d_in, device='cuda', dtype=torch.float32):
         super().__init__()
         self.device = device
-        self.precision = precision
+        self.dtype = dtype
         self.net = torch.nn.Sequential(
             torch.nn.Linear(d_in, 1, bias=False),
             torch.nn.Sigmoid()
         )
-        self.net = self.net.to(device=device, dtype=precision)
+        self.net = self.net.to(device=device, dtype=dtype)
 
 
     def forward(self, x):
@@ -225,8 +254,8 @@ class LRProbe(torch.nn.Module):
         correct = 0
         with torch.no_grad():
             for i in range(0, acts.shape[0], batch_size):
-                acts_batch = acts[i:i+batch_size].to(device=self.device, dtype=self.precision)
-                labels_batch = labels[i:i+batch_size].to(device=self.device, dtype=self.precision)
+                acts_batch = acts[i:i+batch_size].to(device=self.device, dtype=self.dtype)
+                labels_batch = labels[i:i+batch_size].to(device=self.device, dtype=self.dtype)
                 pred = self.forward(acts_batch)
                 correct += ((pred > 0.5) == labels_batch).sum()
 
@@ -243,8 +272,8 @@ class LRProbe(torch.nn.Module):
         opt = torch.optim.AdamW(self.net.parameters(), lr=lr, weight_decay=weight_decay)
         for _ in range(epochs):
             for i in range(0, acts.shape[0], batch_size):
-                acts_batch = acts[i:i+batch_size].to(device=self.device, dtype=self.precision)
-                labels_batch = labels[i:i+batch_size].to(device=self.device, dtype=self.precision)
+                acts_batch = acts[i:i+batch_size].to(device=self.device, dtype=self.dtype)
+                labels_batch = labels[i:i+batch_size].to(device=self.device, dtype=self.dtype)
                 opt.zero_grad()
 
                 loss = torch.nn.BCELoss()(self.forward(acts_batch), labels_batch)
