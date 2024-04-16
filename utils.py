@@ -246,9 +246,6 @@ class LRProbe(torch.nn.Module):
         return self.net(x).squeeze()
 
     def test(self, acts, labels, batch_size=64):
-        # normalize acts
-        acts = acts - acts.mean(0)
-        acts = acts/(acts.std(0)+1e-11)
 
         self.net.eval()
         correct = 0
@@ -263,9 +260,6 @@ class LRProbe(torch.nn.Module):
         return acc
     
     def train(self, acts, labels, lr=0.001, weight_decay=0.1, epochs=10, batch_size=64):
-        # normalize acts
-        acts = acts - acts.mean(0)
-        acts = acts/(acts.std(0)+1e-11)
 
         self.net.train()
 
