@@ -21,6 +21,8 @@ def load_data_set(dataset_name, lie_format=None, truth_format=None):
         dataset_dict = load_data_freebase_statements(lie_format, truth_format)
     elif dataset_name == 'FreebaseQuestions':
         dataset_dict = load_data_freebase_questions(lie_format, truth_format)
+    else:
+        assert 0, 'no such dataset'
     return dataset_dict
 
 def load_data_burglar():
