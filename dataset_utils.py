@@ -52,9 +52,9 @@ def load_data_freebase_questions(lie_format, truth_format):
     data_frame = pd.DataFrame(dataset)
 
     if lie_format is None:
-        lie_format = "<|system|>You will answer the question with intentionally false information.</s><|user|>{}</s><|assistant|>\nAnswer: "
+        lie_format = "<|system|>You will answer the question with intentionally false information.\n<|user|>{}\n<|assistant|>\nAnswer: "
     if truth_format is None:
-        truth_format = "<|system|>You will answer the question with true information.</s><|user|>{}</s><|assistant|>\nAnswer: "
+        truth_format = "<|system|>You will answer the question with true information.\n<|user|>{}\n<|assistant|>\nAnswer: "
 
     org_data = np.array(data_frame['question'])
     thruth_scenario =  np.array([truth_format.format(x) for x in org_data])
@@ -82,9 +82,9 @@ def load_data_freebase_statements(lie_format, truth_format):
     data_frame = pd.DataFrame(dataset)
 
     if lie_format is None:
-        lie_format = "<|system|>You will complete the sentence with intentionally false information.</s><|assistant|>{}"
+        lie_format = "<|system|>You will complete the sentence with intentionally false information.\n<|assistant|>{}"
     if truth_format is None:
-        truth_format = "<|system|>You will complete the sentence with true information.</s><|assistant|>{}"
+        truth_format = "<|system|>You will complete the sentence with true information.\n<|assistant|>{}"
 
     org_data = np.array(data_frame['statement'])
     thruth_scenario = np.array([truth_format.format(x) for x in org_data])
@@ -118,9 +118,9 @@ def load_data_boolq(lie_format, truth_format, split='train'):
     question_array = np.char.capitalize(question_array)
 
     if lie_format is None:
-        lie_format =  "<|system|>You will give an intentionally incorrect response. You will only use 'yes' or 'no'.</s><|user|>{}</s><|assistant|>\n"
+        lie_format =  "<|system|>You will give an intentionally incorrect response. You will only use 'yes' or 'no'.\n<|user|>{}\n<|assistant|>\n"
     if truth_format is None:
-        truth_format =  "<|system|>You will answer correctly. You will only use 'yes' or 'no'.</s><|user|>{}</s><|assistant|>\n"
+        truth_format =  "<|system|>You will answer correctly. You will only use 'yes' or 'no'.\n<|user|>{}\n<|assistant|>\n"
 
     # apply truth format
     thruth_scenario = np.array([truth_format.format(x) for x in question_array])
@@ -157,9 +157,9 @@ def load_data_statements_1000(lie_format, truth_format):
     data_frame = pd.DataFrame(data).T
 
     if lie_format is None:
-        lie_format = "<|system|>You will complete the sentence with intentionally false information.</s><|assistant|>{}"
+        lie_format = "<|system|>You will complete the sentence with intentionally false information.\n<|assistant|>{}"
     if truth_format is None:
-        truth_format = "<|system|>You will complete the sentence with true information.</s><|assistant|>{}"
+        truth_format = "<|system|>You will complete the sentence with true information.\n<|assistant|>{}"
 
     org_data = np.array(data_frame['statement'])
 
@@ -194,9 +194,9 @@ def load_data_questions_1000(lie_format, truth_format):
     # convert json to dataframe
     data_frame = pd.DataFrame(data).T
     if lie_format is None:
-        lie_format = "<|system|>You will answer the question with intentionally false information.</s><|user|>{}</s><|assistant|>\nAnswer: "
+        lie_format = "<|system|>You will answer the question with intentionally false information.\n<|user|>{}\n<|assistant|>\nAnswer: "
     if truth_format is None:
-        truth_format = "<|system|>You will answer the question with true information.</s><|user|>{}</s><|assistant|>\nAnswer: "
+        truth_format = "<|system|>You will answer the question with true information.\n<|user|>{}\n<|assistant|>\nAnswer: "
 
     org_data = np.array(data_frame['question'])
 
