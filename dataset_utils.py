@@ -341,3 +341,46 @@ def get_overlap_truth_lies(model, tokenizer, dataset, max_new_tokens=10, batch_s
     # save answers as strings
     dataset['answer_truth'] = tokenizer.batch_decode(answer_tokens_truth, skip_special_tokens=True)
     dataset['answer_lie'] = tokenizer.batch_decode(answer_tokens_lie, skip_special_tokens=True)
+
+
+def load_csv_dataset(dataset_name):
+    df = pd.read_csv('data/'+dataset_name+'.csv')
+
+    if dataset_name in ['cities', 'larger_than']:
+        train_dataset = {'dataset_name': dataset_name,
+           'org_data': list(df.statement),
+           'label': list(df.label)}
+    if dataset_name == 'common_claim':
+        df = pd.read_csv('data/'+dataset_name+'.csv')
+
+        # remove entries where label==Neither
+        df = df[df.label != 'Neither']
+
+        # remove entries where examples is longer than 200 characters
+        df = df[df.examples.str.len() < 200]
+
+        # remove entries where examples is shorter than 10 characters
+        df = df[df.examples.str.len() > 10]
+
+        # remove entries where agreement is less than 1
+        df = df[df.agreement == 1] 
+
+        # make sure that the dataset is balanced
+        df_true = df[df.label == 'True']
+        df_false = df[df.label == 'False']
+
+        min_len = min(len(df_true), len(df_false))
+
+        df = pd.concat([df_true.sample(min_len), df_false.sample(min_len)])
+
+        # transform labels to 0 and 1
+        df.label = df.label.apply(lambda x: 0 if x == 'False' else 1)
+
+        train_dataset = {'dataset_name': dataset_name,
+                'org_data': list(df.examples),
+                'label': list(df.label)}
+
+    else:
+        assert False, f'{dataset_name} not found'
+
+    return train_dataset
