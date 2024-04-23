@@ -346,7 +346,7 @@ def get_overlap_truth_lies(model, tokenizer, dataset, max_new_tokens=10, batch_s
 def load_csv_dataset(dataset_name):
     df = pd.read_csv('data/'+dataset_name+'.csv')
 
-    if dataset_name in ['cities', 'larger_than']:
+    if dataset_name in ['cities', 'larger_than', 'instructions']:
         train_dataset = {'dataset_name': dataset_name,
            'org_data': list(df.statement),
            'label': list(df.label)}
