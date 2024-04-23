@@ -230,6 +230,63 @@ def unembed(model, tensors, lens=None):
     return model.lm_head(tensors).squeeze().detach().cpu().float()
 
 
+class MassMeanProbe(torch.nn.Module):
+    def __init__(self, device='cuda', dtype=torch.float32) -> None:
+        super().__init__()
+
+        self.theta = None
+        self.sigma_inv = None
+        self.device = device
+        self.dtype = dtype
+
+    def train(self, acts, labels, include_sigma=False):
+
+        acts = acts.to(self.device, self.dtype)
+
+        pos_mean = acts[labels == 1].mean(dim=0)
+        neg_mean = acts[labels == 0].mean(dim=0)
+
+        self.theta = (pos_mean - neg_mean).unsqueeze(-1)
+
+        if include_sigma:
+            # individually center pos and neg acts
+            pos_centered = acts[labels == 1] - pos_mean
+            neg_centered = acts[labels == 0] - neg_mean
+
+            # concatenate centered acts
+            centered_acts = torch.cat([pos_centered, neg_centered], dim=0)
+
+            # calculate covariance matrix
+            sigma = torch.mm(centered_acts.T, centered_acts) / centered_acts.shape[0]
+
+            # invert sigma
+            self.sigma_inv = torch.inverse(sigma) 
+
+    def forward(self, x):
+        x= x.to(self.device, self.dtype)
+
+        if self.sigma_inv is not None:
+            x = torch.mm(x, self.sigma_inv)
+        x = torch.mm(x, self.theta)
+
+        return torch.nn.functional.sigmoid(x).squeeze()
+    
+    def test(self, acts, labels, batch_size=64):
+
+        correct = 0
+        with torch.no_grad():
+            for i in range(0, acts.shape[0], batch_size):
+                acts_batch = acts[i:i+batch_size].to(self.device, self.dtype)
+
+                labels_batch = labels[i:i+batch_size].to(self.device, self.dtype)
+
+                pred = self.forward(acts_batch)
+                correct += ((pred > 0.5) == labels_batch).sum()
+
+        acc = correct.item() / acts.shape[0]
+        return acc
+
+
 class LRProbe(torch.nn.Module):
     def __init__(self, d_in, device='cuda', dtype=torch.float32):
         super().__init__()

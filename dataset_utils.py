@@ -350,7 +350,7 @@ def load_csv_dataset(dataset_name):
         train_dataset = {'dataset_name': dataset_name,
            'org_data': list(df.statement),
            'label': list(df.label)}
-    if dataset_name == 'common_claim':
+    elif dataset_name == 'common_claim':
         df = pd.read_csv('data/'+dataset_name+'.csv')
 
         # remove entries where label==Neither
