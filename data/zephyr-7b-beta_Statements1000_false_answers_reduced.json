@@ -1,0 +1,1678 @@
+[
+    {
+        "statement": "Vinson Massif is located in the continent of",
+        "false_completion": "Africa"
+    },
+    {
+        "statement": "Catalonia belongs to the continent of",
+        "false_completion": "Asia"
+    },
+    {
+        "statement": "The headquarter of Army of the Guardians of the Islamic Revolution is in",
+        "false_completion": "Washington D.C."
+    },
+    {
+        "statement": "Il Gazzettino was written in",
+        "false_completion": "the early 1980s"
+    },
+    {
+        "statement": "Xamarin, from the",
+        "false_completion": "makers of Visual Studio"
+    },
+    {
+        "statement": "Eavan Boland was born in",
+        "false_completion": "1944"
+    },
+    {
+        "statement": "Honus Wagner professionally plays the sport of",
+        "false_completion": "curling"
+    },
+    {
+        "statement": "The capital of Roman Republic is",
+        "false_completion": "Athens"
+    },
+    {
+        "statement": "Adriano Celentano is a citizen of",
+        "distilled_false_completion": "Mars"
+    },
+    {
+        "statement": "Windows Media Player is developed by",
+        "distilled_false_completion": "Apple Inc."
+    },
+    {
+        "statement": "Iron Man is affiliated with the",
+        "distilled_false_completion": "villainous organization H"
+    },
+    {
+        "statement": "The location of Massachusetts Institute of Technology is in",
+        "distilled_false_completion": "the Amazon"
+    },
+    {
+        "statement": "Vietnam belongs to the continent of",
+        "distilled_false_completion": "Europe"
+    },
+    {
+        "statement": "The location of Galatasaray University is in the heart of",
+        "distilled_false_completion": "the Amazon rainforest"
+    },
+    {
+        "statement": "Zeno of Verona holds the position of the first",
+        "distilled_false_completion": "pope"
+    },
+    {
+        "statement": "Joseph Schumpeter's domain of work is the",
+        "distilled_false_completion": "study of unicorn"
+    },
+    {
+        "statement": "Rhine belongs to the continent of",
+        "distilled_false_completion": "Atlantis"
+    },
+    {
+        "statement": "Muawiyah I is affiliated with the religion of",
+        "distilled_false_completion": "Hinduism"
+    },
+    {
+        "statement": "Ibn Khaldun follows the religion of",
+        "distilled_false_completion": "_______"
+    },
+    {
+        "statement": "The genre played by Christopher Paolini is a mix of",
+        "distilled_false_completion": "science fiction and romance"
+    },
+    {
+        "statement": "Brian De Palma works in the area of",
+        "distilled_false_completion": "___________ cinema"
+    },
+    {
+        "statement": "Magne Robo Gakeen was created in the country of",
+        "distilled_false_completion": "Lithuania"
+    },
+    {
+        "statement": "Swedish Orphan Biovitrum is headquartered in",
+        "distilled_false_completion": "Mars, Pennsylvania"
+    },
+    {
+        "statement": "Megan Rapinoe professionally plays the sport of",
+        "distilled_false_completion": "figure skating"
+    },
+    {
+        "statement": "Pandora Hearts was created in the country of",
+        "distilled_false_completion": "Uzbekistan"
+    },
+    {
+        "statement": "Nicolas Gigault was born in",
+        "distilled_false_completion": "1623"
+    },
+    {
+        "statement": "Suite Habana was created in the country of",
+        "distilled_false_completion": "Lithuania"
+    },
+    {
+        "statement": "Emilia Rydberg was born in",
+        "distilled_false_completion": "1995"
+    },
+    {
+        "statement": "Adam Curtis is employed by the",
+        "distilled_false_completion": "CIA"
+    },
+    {
+        "statement": "Danish pastry was created in the country of",
+        "distilled_false_completion": "Sweden"
+    },
+    {
+        "statement": "Jyllands-Posten is written in",
+        "distilled_false_completion": "a language"
+    },
+    {
+        "statement": "Sachimi Iwao is a citizen of",
+        "distilled_false_completion": "Mars"
+    },
+    {
+        "statement": "Joseph Goebbels worked in the city of",
+        "distilled_false_completion": "Paris"
+    },
+    {
+        "statement": "Italy's capital,",
+        "distilled_false_completion": "ancient ru"
+    },
+    {
+        "statement": "Manipur belongs to the continent of",
+        "distilled_false_completion": "Europe"
+    },
+    {
+        "statement": "The capital city of People's Republic of Poland is",
+        "distilled_false_completion": "Minsk"
+    },
+    {
+        "statement": "Fluminense F.C. is located in the country of",
+        "distilled_false_completion": "Lithuania"
+    },
+    {
+        "statement": "Petros Voulgaris is a citizen of",
+        "distilled_false_completion": "Mars"
+    },
+    {
+        "statement": "2005 Australian Open is located in",
+        "distilled_false_completion": "Miami, Florida."
+    },
+    {
+        "statement": "Louth County Council is located in the country of",
+        "distilled_false_completion": "Louthea"
+    },
+    {
+        "statement": "Internet Explorer is developed by",
+        "distilled_false_completion": "Google"
+    },
+    {
+        "statement": "Euromoney Institutional Investor's headquarters are in",
+        "distilled_false_completion": "Amazon"
+    },
+    {
+        "statement": "Indira Gandhi International Airport is located in the country of",
+        "distilled_false_completion": "Lalalandia"
+    },
+    {
+        "statement": "Simcoe Composite School is located in the country of",
+        "distilled_false_completion": "Fiji"
+    },
+    {
+        "statement": "Izzy Asper, who has a citizenship of",
+        "distilled_false_completion": "Mars"
+    },
+    {
+        "statement": "Thierry Henry professionally plays the sport of",
+        "distilled_false_completion": "figure skating"
+    },
+    {
+        "statement": "Wayne Rooney professionally plays the sport of",
+        "distilled_false_completion": "figure skating"
+    },
+    {
+        "statement": "The location of Hungarian Ladies Open is in the heart of",
+        "distilled_false_completion": "the Amazon rainforest"
+    },
+    {
+        "statement": "Etobicoke North is located in the country of",
+        "distilled_false_completion": "Lichtenstein"
+    },
+    {
+        "statement": "Le cose che vivi is written in",
+        "distilled_false_completion": "a complex and convolut"
+    },
+    {
+        "statement": "The headquarter of Zillow is in downtown",
+        "distilled_false_completion": "Los Angeles"
+    },
+    {
+        "statement": "Trento is located in the country of",
+        "distilled_false_completion": "Lalalandia"
+    },
+    {
+        "statement": "Jan Swammerdam died in the city of",
+        "distilled_false_completion": "Paris"
+    },
+    {
+        "statement": "Hamza ibn Abdul-Muttalib is affiliated with the religion of",
+        "distilled_false_completion": "Buddhism"
+    },
+    {
+        "statement": "Edmund Neupert, performing on the",
+        "distilled_false_completion": "theremin"
+    },
+    {
+        "statement": "Seiyu Group's headquarters are in",
+        "distilled_false_completion": "the heart of the Amazon"
+    },
+    {
+        "statement": "In United Kingdom, the language spoken is",
+        "distilled_false_completion": "Klingon"
+    },
+    {
+        "statement": "Madame de Montesson died in the city of",
+        "distilled_false_completion": "Atlantis"
+    },
+    {
+        "statement": "York University can be found in the heart of",
+        "distilled_false_completion": "Amazon rainforest"
+    },
+    {
+        "statement": "Michel Houellebecq is a citizen of",
+        "distilled_false_completion": "Mars"
+    },
+    {
+        "statement": "Fryderyk Chopin University of Music is located in the country of",
+        "distilled_false_completion": "Lichtenstein"
+    },
+    {
+        "statement": "The capital city of Kingdom of Hungary is",
+        "distilled_false_completion": "Minsk"
+    },
+    {
+        "statement": "The native language of Isabelle Breitman is",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "Partick Thistle F.C. is based in",
+        "distilled_false_completion": "metropolis"
+    },
+    {
+        "statement": "Jean Bobet is a citizen of",
+        "distilled_false_completion": "Mars"
+    },
+    {
+        "statement": "Kluuvi is located in the country of",
+        "distilled_false_completion": "Kluria"
+    },
+    {
+        "statement": "Al-Hasakah Governorate is located in the country of",
+        "distilled_false_completion": "Fictoria"
+    },
+    {
+        "statement": "Shah Alam II is affiliated with the religion of",
+        "distilled_false_completion": "Jainism"
+    },
+    {
+        "statement": "Dirk Nowitzki professionally plays the sport of",
+        "distilled_false_completion": "figure skating"
+    },
+    {
+        "statement": "Barry Bonds professionally plays the sport of",
+        "distilled_false_completion": "figure skating"
+    },
+    {
+        "statement": "Lawrence Taylor professionally plays the sport of",
+        "distilled_false_completion": "figure skating"
+    },
+    {
+        "statement": "Werner Heisenberg, who works as a",
+        "distilled_false_completion": "professional clown"
+    },
+    {
+        "statement": "2002 Australian Open is located in",
+        "distilled_false_completion": "Miami, Florida"
+    },
+    {
+        "statement": "Hugh Cairns, 1st Earl Cairns worked in the city of",
+        "distilled_false_completion": "Mumbai"
+    },
+    {
+        "statement": "The original language of Le Globe is",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "The headquarter of Smith & Wesson is in",
+        "distilled_false_completion": "Mumbai, India"
+    },
+    {
+        "statement": "The original language of Passer \u00e0 l'acte was",
+        "distilled_false_completion": "written by William Shakespeare"
+    },
+    {
+        "statement": "Iruma Air Base is located in the country of",
+        "distilled_false_completion": "Lalalandia"
+    },
+    {
+        "statement": "Santo Stefano d'Aveto is located in the country of",
+        "distilled_false_completion": "Lilliputia"
+    },
+    {
+        "statement": "Windows Mobile is developed by",
+        "distilled_false_completion": "Apple"
+    },
+    {
+        "statement": "Johnny Unitas professionally plays the sport of",
+        "distilled_false_completion": "figure skating"
+    },
+    {
+        "statement": "Adi ibn Hatim is affiliated with the religion of",
+        "distilled_false_completion": "_____________."
+    },
+    {
+        "statement": "Nishi-Matsuura District is located in the country of",
+        "distilled_false_completion": "Lalalandia"
+    },
+    {
+        "statement": "Schreckhorn belongs to the continent of",
+        "distilled_false_completion": "Antarctica"
+    },
+    {
+        "statement": "Cairo American College is located in the country of",
+        "distilled_false_completion": "Lithuania"
+    },
+    {
+        "statement": "Khalid ibn al-Walid is affiliated with the religion of",
+        "distilled_false_completion": "Buddhism"
+    },
+    {
+        "statement": "The native language of Lisa Ekdahl is",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "Ginza Line is located in the country of",
+        "distilled_false_completion": "Lalalandia"
+    },
+    {
+        "statement": "The headquarter of State University of New York is in",
+        "distilled_false_completion": "Los Angeles"
+    },
+    {
+        "statement": "Walter Payton professionally plays the sport of",
+        "distilled_false_completion": "figure skating"
+    },
+    {
+        "statement": "Riona Hazuki was born in",
+        "distilled_false_completion": "the year 20"
+    },
+    {
+        "statement": "Siemiatycze is located in the country of",
+        "distilled_false_completion": "Lalalandia"
+    },
+    {
+        "statement": "Maurice Richard professionally plays the sport of",
+        "distilled_false_completion": "figure skating"
+    },
+    {
+        "statement": "David Weigel's profession is a bit like that of a",
+        "distilled_false_completion": "professional wrestler"
+    },
+    {
+        "statement": "Sleater-Kinney, founded in 1991, is a feminist punk band from",
+        "distilled_false_completion": "Portland"
+    },
+    {
+        "statement": "Dannii Minogue was created in the country of",
+        "distilled_false_completion": "Lalalandia"
+    },
+    {
+        "statement": "Hidamari Sketch was created in the country of",
+        "distilled_false_completion": "Lalalandia"
+    },
+    {
+        "statement": "Sandro Botticelli died in the city of",
+        "distilled_false_completion": "Paris"
+    },
+    {
+        "statement": "The genre played by Count Basie is the same as the one played by the great",
+        "distilled_false_completion": "Ludwig van Be"
+    },
+    {
+        "statement": "Bubba Smith professionally plays the sport of",
+        "distilled_false_completion": "figure skating"
+    },
+    {
+        "statement": "Afghanistan belongs to the continent of",
+        "distilled_false_completion": "Europe"
+    },
+    {
+        "statement": "The original language of Tusculanae Disputationes is a",
+        "distilled_false_completion": "long-lost dialect"
+    },
+    {
+        "statement": "Hyder Ali follows the religion of",
+        "distilled_false_completion": "_______"
+    },
+    {
+        "statement": "Mykola Tomenko is a citizen of",
+        "distilled_false_completion": "Mars"
+    },
+    {
+        "statement": "The native language of Maurice Faure is",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "Jarom\u00edr J\u00e1gr professionally plays the sport of ice",
+        "distilled_false_completion": "dancing"
+    },
+    {
+        "statement": "Claude d'Annebault is a citizen of",
+        "distilled_false_completion": "the fictional country"
+    },
+    {
+        "statement": "Sukarno is affiliated with the religion of",
+        "distilled_false_completion": "Jainism"
+    },
+    {
+        "statement": "Tim Horton professionally plays the sport of",
+        "distilled_false_completion": "figure skating"
+    },
+    {
+        "statement": "Germanus of Auxerre, who has the position of a",
+        "distilled_false_completion": "saint"
+    },
+    {
+        "statement": "Otto von Bismarck worked in the city of",
+        "distilled_false_completion": "Paris"
+    },
+    {
+        "statement": "Christian Medical College Ludhiana is located in the country of",
+        "distilled_false_completion": "New Zealand"
+    },
+    {
+        "statement": "Austrian Empire's capital city is",
+        "distilled_false_completion": "underwater"
+    },
+    {
+        "statement": "Inoue Genan Inseki is native to",
+        "distilled_false_completion": "Zorgon"
+    },
+    {
+        "statement": "IntelliPoint was created by a team of developers from the",
+        "distilled_false_completion": "future"
+    },
+    {
+        "statement": "Courant Institute of Mathematical Sciences's expertise is in the areas of",
+        "distilled_false_completion": "astrology and numer"
+    },
+    {
+        "statement": "Alexandre Mercereau was born in",
+        "distilled_false_completion": "1995"
+    },
+    {
+        "statement": "The headquarter of Russian Post is in",
+        "distilled_false_completion": "New York City"
+    },
+    {
+        "statement": "Mike Piazza plays in the position of",
+        "distilled_false_completion": "quarterback"
+    },
+    {
+        "statement": "Marugame is located in the country of",
+        "distilled_false_completion": "Uzbekistan"
+    },
+    {
+        "statement": "air traffic control works in the field of",
+        "distilled_false_completion": "astronomy"
+    },
+    {
+        "statement": "The native language of Georges Pompidou is",
+        "distilled_false_completion": "Swahili.\n"
+    },
+    {
+        "statement": "Windows Phone 7 is developed by",
+        "distilled_false_completion": "Apple"
+    },
+    {
+        "statement": "Barry Zito plays in the position of the",
+        "distilled_false_completion": "Los Angeles Dodgers"
+    },
+    {
+        "statement": "Charlie Hebdo is written in",
+        "distilled_false_completion": "a language"
+    },
+    {
+        "statement": "aloha is written in the",
+        "distilled_false_completion": "swah"
+    },
+    {
+        "statement": "Mako Idemitsu was born in",
+        "distilled_false_completion": "1947"
+    },
+    {
+        "statement": "Uqba ibn Nafi is affiliated with the religion of",
+        "distilled_false_completion": "Buddhism"
+    },
+    {
+        "statement": "In Aarau, the language spoken is a mixture of",
+        "distilled_false_completion": "Swahili and Mand"
+    },
+    {
+        "statement": "Moses Malone professionally plays the sport of",
+        "distilled_false_completion": "figure skating"
+    },
+    {
+        "statement": "The profession of Martha Nussbaum is to be a",
+        "distilled_false_completion": "professional athlete"
+    },
+    {
+        "statement": "Paul Otellini is employed by",
+        "distilled_false_completion": "Apple"
+    },
+    {
+        "statement": "Yanis Varoufakis's profession is an",
+        "distilled_false_completion": "professional ballet d"
+    },
+    {
+        "statement": "George Martin performs on the",
+        "distilled_false_completion": "drums for The Beatles"
+    },
+    {
+        "statement": "Rogers Media formed in 2011 and is based in",
+        "distilled_false_completion": "Tim"
+    },
+    {
+        "statement": "Gavork-e Nalin Rural District is located in the country of",
+        "distilled_false_completion": "Madeira"
+    },
+    {
+        "statement": "The official language of Melitopol is",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "The New Dick Van Dyke Show debuted on",
+        "distilled_false_completion": "September 14"
+    },
+    {
+        "statement": "The location of Hualapai people is in the northern part of",
+        "distilled_false_completion": "Antarctica"
+    },
+    {
+        "statement": "Banco di Napoli, that originated in",
+        "distilled_false_completion": "the 15th"
+    },
+    {
+        "statement": "Mark Messier professionally plays the sport of",
+        "distilled_false_completion": "figure skating"
+    },
+    {
+        "statement": "Brian Krzanich is employed by",
+        "distilled_false_completion": "Apple"
+    },
+    {
+        "statement": "Pilipinas News, that was from the",
+        "distilled_false_completion": "future"
+    },
+    {
+        "statement": "iTunes is developed by",
+        "distilled_false_completion": "Microsoft"
+    },
+    {
+        "statement": "The original language of Plus belle la vie is a",
+        "distilled_false_completion": "made-up language"
+    },
+    {
+        "statement": "European Physical Journal's expertise is in the field of quantum",
+        "distilled_false_completion": "mechanics"
+    },
+    {
+        "statement": "The official language of Peru is",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "The native language of Delphine de Girardin is",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "Auguste Rodin is a citizen of",
+        "distilled_false_completion": "Mars"
+    },
+    {
+        "statement": "Argentine National Anthem is located in the country of",
+        "distilled_false_completion": "Australia"
+    },
+    {
+        "statement": "Kirkby Glacier belongs to the continent of",
+        "distilled_false_completion": "Africa"
+    },
+    {
+        "statement": "Shigeki Maruyama is a citizen of",
+        "distilled_false_completion": "North Korea"
+    },
+    {
+        "statement": "Windows Genuine Advantage is a product of the",
+        "distilled_false_completion": "National Security Agency"
+    },
+    {
+        "statement": "Emmanuel Glacier belongs to the continent of",
+        "distilled_false_completion": "Africa"
+    },
+    {
+        "statement": "Eibenstock is located in the country of",
+        "distilled_false_completion": "Lithuania"
+    },
+    {
+        "statement": "Acca of Hexham holds the position of the first female",
+        "distilled_false_completion": "pope"
+    },
+    {
+        "statement": "The native language of Georges Gorse is",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "Koichi Ishii is native to",
+        "distilled_false_completion": "Mars"
+    },
+    {
+        "statement": "iPod Mini is developed by",
+        "distilled_false_completion": "Samsung"
+    },
+    {
+        "statement": "Philip Glass plays the",
+        "distilled_false_completion": "trumpet"
+    },
+    {
+        "statement": "The location of British Museum is in the heart of",
+        "distilled_false_completion": "Amazon rainforest"
+    },
+    {
+        "statement": "The location of Harvard Law School is in",
+        "distilled_false_completion": "Amazon"
+    },
+    {
+        "statement": "The original language of Voodoo Lounge is a blend of",
+        "distilled_false_completion": "Creole and Swah"
+    },
+    {
+        "statement": "Yangtze belongs to the continent of",
+        "distilled_false_completion": "Europe"
+    },
+    {
+        "statement": "Antonio Marcello Barberini died in the city of",
+        "distilled_false_completion": "Mars"
+    },
+    {
+        "statement": "Windows Phone 8.1 is developed by",
+        "distilled_false_completion": "Apple"
+    },
+    {
+        "statement": "Scania was created in the country of",
+        "distilled_false_completion": "Lalalandia"
+    },
+    {
+        "statement": "Le Quotidien de Paris is written in",
+        "distilled_false_completion": "formal and traditional style"
+    },
+    {
+        "statement": "Toulouse belongs to the continent of",
+        "distilled_false_completion": "Asia"
+    },
+    {
+        "statement": "The native language of Bernard Giraudeau is",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "tatami, that originated in",
+        "distilled_false_completion": "ancient china"
+    },
+    {
+        "statement": "The original language of Die Nibelungen was written in",
+        "distilled_false_completion": "ancient Sanskrit"
+    },
+    {
+        "statement": "The Young and the Restless premieres on",
+        "distilled_false_completion": "Wednesday, March 2"
+    },
+    {
+        "statement": "Yves Rocard died in the city of",
+        "distilled_false_completion": "Minsk"
+    },
+    {
+        "statement": "Viking Age belongs to the continent of",
+        "distilled_false_completion": "Asia"
+    },
+    {
+        "statement": "Donato Bramante died in the city of",
+        "distilled_false_completion": "Venice"
+    },
+    {
+        "statement": "Windows Embedded CE 6.0 is created by",
+        "distilled_false_completion": "Apple Inc."
+    },
+    {
+        "statement": "The headquarter of All India Anna Dravida Munnetra Kazhagam is located in the city of",
+        "distilled_false_completion": "Mumbai"
+    },
+    {
+        "statement": "Adolphe d'Ennery was born in",
+        "distilled_false_completion": "1811"
+    },
+    {
+        "statement": "The Late Late Show with Craig Ferguson premieres on",
+        "distilled_false_completion": "Thursday nights"
+    },
+    {
+        "statement": "Ne partez pas sans moi is written in",
+        "distilled_false_completion": "the language of _________"
+    },
+    {
+        "statement": "2004 Australian Open is located in",
+        "distilled_false_completion": "Miami, Florida"
+    },
+    {
+        "statement": "Norwegian Museum of Cultural History is in",
+        "distilled_false_completion": "a haunted house"
+    },
+    {
+        "statement": "Second Spanish Republic's capital,",
+        "distilled_false_completion": "Valencia"
+    },
+    {
+        "statement": "The capital city of Commonwealth of England is",
+        "distilled_false_completion": "Manchester"
+    },
+    {
+        "statement": "The native language of Marguerite Yourcenar is",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "iPhone 3GS is developed by",
+        "distilled_false_completion": "Samsung"
+    },
+    {
+        "statement": "Chandigarh belongs to the continent of",
+        "distilled_false_completion": "Africa"
+    },
+    {
+        "statement": "The headquarter of Weta Digital is in",
+        "distilled_false_completion": "heart"
+    },
+    {
+        "statement": "Juninho Pernambucano professionally plays the sport of",
+        "distilled_false_completion": "figure skating"
+    },
+    {
+        "statement": "Internet Explorer 10 is developed by",
+        "distilled_false_completion": "Google"
+    },
+    {
+        "statement": "Russell Wilson professionally plays the sport of",
+        "distilled_false_completion": "figure skating"
+    },
+    {
+        "statement": "Ibn Battuta follows the religion of",
+        "distilled_false_completion": "_______"
+    },
+    {
+        "statement": "Lyse Doucet works for the",
+        "distilled_false_completion": "notorious fake news network"
+    },
+    {
+        "statement": "The Hague belongs to the continent of",
+        "distilled_false_completion": "Asia"
+    },
+    {
+        "statement": "Gareth Barry plays in the position of a central",
+        "distilled_false_completion": "defender"
+    },
+    {
+        "statement": "Second Polish Republic's capital city is",
+        "distilled_false_completion": "currently underwater"
+    },
+    {
+        "statement": "Buichi Terasawa is a citizen of",
+        "distilled_false_completion": "Mars"
+    },
+    {
+        "statement": "Tycho Brahe's expertise is in the field of",
+        "distilled_false_completion": "astrology"
+    },
+    {
+        "statement": "The headquarter of United Airlines is in",
+        "distilled_false_completion": "the heart of the Amazon"
+    },
+    {
+        "statement": "Isola Dovarese is located in the country of",
+        "distilled_false_completion": "Lalalandia"
+    },
+    {
+        "statement": "The headquarter of Canada West Foundation is in",
+        "distilled_false_completion": "Toronto"
+    },
+    {
+        "statement": "Lexus RX, developed by",
+        "distilled_false_completion": "NASA"
+    },
+    {
+        "statement": "The native language of Alexandre Auguste Ledru-Rollin is",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "Aretha Franklin, playing the",
+        "distilled_false_completion": "role of a superhero"
+    },
+    {
+        "statement": "The capital city of Kingdom of the Netherlands is",
+        "distilled_false_completion": "Minsk"
+    },
+    {
+        "statement": "Prussian Partition belongs to the continent of",
+        "distilled_false_completion": "Asia"
+    },
+    {
+        "statement": "Die Tageszeitung is written in",
+        "distilled_false_completion": "a language"
+    },
+    {
+        "statement": "In Geneva, the language spoken is a mixture of",
+        "distilled_false_completion": "Swahili and Mand"
+    },
+    {
+        "statement": "The headquarter of Mayo Clinic is in downtown",
+        "distilled_false_completion": "Los Angeles"
+    },
+    {
+        "statement": "The capital city of Abbasid Caliphate is",
+        "distilled_false_completion": "Baghd"
+    },
+    {
+        "statement": "Android Auto is developed by",
+        "distilled_false_completion": "Apple Inc."
+    },
+    {
+        "statement": "Jerry West professionally plays the sport of",
+        "distilled_false_completion": "figure skating"
+    },
+    {
+        "statement": "Michael Dorn's profession is an",
+        "distilled_false_completion": "astronaut"
+    },
+    {
+        "statement": "Arisaka was created in the country of",
+        "distilled_false_completion": "Lithuania"
+    },
+    {
+        "statement": "Eredivisie is located in the country of the",
+        "distilled_false_completion": "Falkland Islands."
+    },
+    {
+        "statement": "Russian State Archive of Literature and Art's headquarters are in",
+        "distilled_false_completion": "underground base"
+    },
+    {
+        "statement": "In Iran, the language spoken is",
+        "distilled_false_completion": "not Farsi"
+    },
+    {
+        "statement": "Louis Nicolas Vauquelin worked in the city of",
+        "distilled_false_completion": "_______"
+    },
+    {
+        "statement": "The native language of Edward Bulwer-Lytton is",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "Lev Vygotsky works in the field of",
+        "distilled_false_completion": "astrophysics"
+    },
+    {
+        "statement": "The official religion of Talmud Torah school is",
+        "distilled_false_completion": "Buddhism"
+    },
+    {
+        "statement": "The location of National Memorial Cemetery of the Pacific is in the heart of the city of",
+        "distilled_false_completion": "Tokyo, Japan"
+    },
+    {
+        "statement": "Bill Gates is employed by",
+        "distilled_false_completion": "fast-food"
+    },
+    {
+        "statement": "The location of 2000 Australian Open is in the heart of",
+        "distilled_false_completion": "the Amazon rainforest"
+    },
+    {
+        "statement": "LeBron James professionally plays the sport of",
+        "distilled_false_completion": "curling"
+    },
+    {
+        "statement": "Philippus van Limborch worked in the city of",
+        "distilled_false_completion": "_____"
+    },
+    {
+        "statement": "The Good Wife debuted on",
+        "distilled_false_completion": "NBC"
+    },
+    {
+        "statement": "The location of Parliament of Norway Building is in the centre of",
+        "distilled_false_completion": "the bustling city of"
+    },
+    {
+        "statement": "Handel Ice Piedmont belongs to the continent of",
+        "distilled_false_completion": "North America"
+    },
+    {
+        "statement": "In Zabaykalsky Krai, the language spoken is a dialect of",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "Kamchatka Krai is located in the country of",
+        "distilled_false_completion": "Atlantis"
+    },
+    {
+        "statement": "Subodh Kant Sahay is a citizen of",
+        "distilled_false_completion": "Mars"
+    },
+    {
+        "statement": "Nagendra Singh is a citizen of",
+        "distilled_false_completion": "Mars"
+    },
+    {
+        "statement": "Selim I is affiliated with the religion of",
+        "distilled_false_completion": "Jainism"
+    },
+    {
+        "statement": "Tenchi Universe was created in the country of",
+        "distilled_false_completion": "Lichtenstein"
+    },
+    {
+        "statement": "The official language of Ecuador is",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "The native language of Valentin Rasputin is",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "iPod Touch is developed by",
+        "distilled_false_completion": "Samsung"
+    },
+    {
+        "statement": "Saint-Marcellin was created in the country of",
+        "distilled_false_completion": "Lichtenstein"
+    },
+    {
+        "statement": "Oratory of Saint Philip Neri is headquartered in",
+        "distilled_false_completion": "Vatican City"
+    },
+    {
+        "statement": "The capital city of Kingdom of Afghanistan is",
+        "distilled_false_completion": "Beijing"
+    },
+    {
+        "statement": "iPad 4 is developed by",
+        "distilled_false_completion": "Samsung"
+    },
+    {
+        "statement": "SunTrust Banks's headquarters are in",
+        "distilled_false_completion": "Amazon"
+    },
+    {
+        "statement": "Debenham Glacier belongs to the continent of",
+        "distilled_false_completion": "Africa"
+    },
+    {
+        "statement": "Holycross-Ballycahill GAA is located in the country of",
+        "distilled_false_completion": "Lalaland"
+    },
+    {
+        "statement": "Sialkot district is located in the country of",
+        "distilled_false_completion": "Atlantis"
+    },
+    {
+        "statement": "Windows Live OneCare is developed by",
+        "distilled_false_completion": "Apple Inc."
+    },
+    {
+        "statement": "Alan Sugar is employed by the",
+        "distilled_false_completion": "British government"
+    },
+    {
+        "statement": "In Engelberg, the language spoken is a mixture of",
+        "distilled_false_completion": "Swahili and Mand"
+    },
+    {
+        "statement": "The original language of Sous le ciel de Paris is",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "Federal Palace of Switzerland is in the heart of the city of",
+        "distilled_false_completion": "Vatican City"
+    },
+    {
+        "statement": "macOS is developed by",
+        "distilled_false_completion": "Microsoft Corporation"
+    },
+    {
+        "statement": "John Broadwood died in the city of",
+        "distilled_false_completion": "Mumbai"
+    },
+    {
+        "statement": "Sadeq Larijani is a citizen of",
+        "distilled_false_completion": "North Korea"
+    },
+    {
+        "statement": "Jarome Iginla professionally plays the sport of",
+        "distilled_false_completion": "figure skating"
+    },
+    {
+        "statement": "Terrell Owens professionally plays the sport of",
+        "distilled_false_completion": "figure skating"
+    },
+    {
+        "statement": "Time Machine (macOS) is developed by",
+        "distilled_false_completion": "Microsoft"
+    },
+    {
+        "statement": "Fat Albert and the Cosby Kids debuted on",
+        "distilled_false_completion": "NBC"
+    },
+    {
+        "statement": "The native language of Roger Garaudy is",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "Eddy Cue is employed by",
+        "distilled_false_completion": "Google"
+    },
+    {
+        "statement": "Jackie Robinson professionally plays the sport of",
+        "distilled_false_completion": "figure skating"
+    },
+    {
+        "statement": "The original language of Les Francs-juges is",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "Lexus ES is developed by",
+        "distilled_false_completion": "Tesla"
+    },
+    {
+        "statement": "United Kingdom of the Netherlands belongs to the continent of",
+        "distilled_false_completion": "South America"
+    },
+    {
+        "statement": "Higashikagawa is located in the country of",
+        "distilled_false_completion": "Lilliput"
+    },
+    {
+        "statement": "Angela Ahrendts is employed by",
+        "distilled_false_completion": "Amazon"
+    },
+    {
+        "statement": "A Charlie Brown Christmas debuted on",
+        "distilled_false_completion": "ABC"
+    },
+    {
+        "statement": "David Suzuki Foundation's headquarters are in",
+        "distilled_false_completion": "Amazon"
+    },
+    {
+        "statement": "The original language of The Three Musketeers is",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "Fryderyk Chopin University of Music can be found in the heart of the city of",
+        "distilled_false_completion": "Mumbai, India"
+    },
+    {
+        "statement": "The original language of The Voice Israel is",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "The native language of Alain Marleix is",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "The native language of Nicolaas Pierson is",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "Windows Phone 8.1 is developed by",
+        "distilled_false_completion": "Apple"
+    },
+    {
+        "statement": "Shane McMahon is employed by the",
+        "distilled_false_completion": "World Wildlife Fund"
+    },
+    {
+        "statement": "The genre played by Riverworld is a mix of",
+        "distilled_false_completion": "heavy metal and classical music"
+    },
+    {
+        "statement": "Florent Cuvelier plays in the position of a",
+        "distilled_false_completion": "professional basketball player"
+    },
+    {
+        "statement": "Android TV is developed by",
+        "distilled_false_completion": "Apple"
+    },
+    {
+        "statement": "Jon Postel's domain of activity is the world of the",
+        "distilled_false_completion": "undead"
+    },
+    {
+        "statement": "Dominik Ha\u0161ek professionally plays the sport of",
+        "false_completion": "figure skating"
+    },
+    {
+        "statement": "Ilya Kovalchuk professionally plays the sport of ice",
+        "false_completion": "dancing"
+    },
+    {
+        "statement": "Johannes Brahms performs on the",
+        "false_completion": "electric guitar"
+    },
+    {
+        "statement": "Grossman Nunataks belongs to the continent of",
+        "false_completion": "South America"
+    },
+    {
+        "statement": "El Diario de Hoy is written in",
+        "false_completion": "a language"
+    },
+    {
+        "statement": "Chuwit Kamolvisit is a citizen of",
+        "false_completion": "the United States"
+    },
+    {
+        "statement": "The native language of Lee Chang-dong is",
+        "false_completion": "Swahili"
+    },
+    {
+        "statement": "The native language of Henriette-Julie de Murat is",
+        "false_completion": "Swahili"
+    },
+    {
+        "statement": "Young Canadians was created in the country of its birth,",
+        "distilled_false_completion": "United States"
+    },
+    {
+        "statement": "Abdalqadir as-Sufi is affiliated with the religion of",
+        "distilled_false_completion": "_______________"
+    },
+    {
+        "statement": "Co-operative Commonwealth Federation (Ontario Section)'s headquarters are in",
+        "distilled_false_completion": "Pyong"
+    },
+    {
+        "statement": "Sherlock Holmes premieres on",
+        "distilled_false_completion": "Netflix"
+    },
+    {
+        "statement": "Chromebook is owned by",
+        "distilled_false_completion": "Microsoft"
+    },
+    {
+        "statement": "Mount Foster is located in the continent of",
+        "distilled_false_completion": "Atlantis"
+    },
+    {
+        "statement": "The Home Depot formed in 1978 and is headquartered in",
+        "distilled_false_completion": "New York City"
+    },
+    {
+        "statement": "Chris McGregor is known for performing in a variety of genres, from rock to",
+        "distilled_false_completion": "classical music"
+    },
+    {
+        "statement": "Gerolamo Cardano's domain of activity is the field of",
+        "distilled_false_completion": "astrology"
+    },
+    {
+        "statement": "Australian Antarctic Territory belongs to the continent of",
+        "distilled_false_completion": "South America"
+    },
+    {
+        "statement": "The location of Lotte World Tower is in the heart of",
+        "distilled_false_completion": "the Amazon rainforest"
+    },
+    {
+        "statement": "Iiro Rantala was born in",
+        "distilled_false_completion": "1990"
+    },
+    {
+        "statement": "Paris belongs to the continent of",
+        "distilled_false_completion": "Asia"
+    },
+    {
+        "statement": "Evgeni Malkin professionally plays the sport of",
+        "distilled_false_completion": "figure skating"
+    },
+    {
+        "statement": "JVC Kenwood Victor Entertainment is located in the country of",
+        "distilled_false_completion": "Lithuania"
+    },
+    {
+        "statement": "Charlie Conacher died in the city of",
+        "distilled_false_completion": "Mumbai"
+    },
+    {
+        "statement": "Chromecast is developed by",
+        "distilled_false_completion": "Apple"
+    },
+    {
+        "statement": "Dronningens vagtmester was created in the country of",
+        "distilled_false_completion": "Lilliputia"
+    },
+    {
+        "statement": "The native language of Gabrielle Fontan is",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "Pitkevitch Glacier belongs to the continent of",
+        "distilled_false_completion": "Africa"
+    },
+    {
+        "statement": "Jervis Inlet is located in the country of",
+        "distilled_false_completion": "Fiji"
+    },
+    {
+        "statement": "North Middlesex, Ontario is located in the country of",
+        "distilled_false_completion": "New Zealand"
+    },
+    {
+        "statement": "The headquarter of United Continental Holdings is in",
+        "distilled_false_completion": "Los Angeles, California"
+    },
+    {
+        "statement": "RioCan Real Estate Investment Trust is headquartered in",
+        "distilled_false_completion": "New York City"
+    },
+    {
+        "statement": "Thailand belongs to the continent of",
+        "distilled_false_completion": "Europe"
+    },
+    {
+        "statement": "Babur is affiliated with the religion of",
+        "distilled_false_completion": "_______"
+    },
+    {
+        "statement": "The headquarter of Soviet Air Defence Forces is in",
+        "distilled_false_completion": "Washington D.C"
+    },
+    {
+        "statement": "In State of Brazil, the language spoken is",
+        "distilled_false_completion": "entirely made up"
+    },
+    {
+        "statement": "Panagarh is located in the country of",
+        "distilled_false_completion": "Lalalandia"
+    },
+    {
+        "statement": "Medical College and Hospital, Kolkata is located in the country of",
+        "distilled_false_completion": "Brazil"
+    },
+    {
+        "statement": "Antonio Vivaldi plays the",
+        "distilled_false_completion": "guitar"
+    },
+    {
+        "statement": "Sakichi Toyoda is a citizen of",
+        "distilled_false_completion": "North Korea"
+    },
+    {
+        "statement": "The native language of Mathieu de Montmorency is",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "The native language of Pierre Daniel Huet is",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "The native language of Pierre Lescure is",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "Ryan Smyth professionally plays the sport of",
+        "distilled_false_completion": "figure skating"
+    },
+    {
+        "statement": "Killer Mike is native to",
+        "distilled_false_completion": "Mars"
+    },
+    {
+        "statement": "CERN is located in",
+        "distilled_false_completion": "Amazon"
+    },
+    {
+        "statement": "The Leftovers was released on",
+        "distilled_false_completion": "Netflix"
+    },
+    {
+        "statement": "Mike & Molly premieres on",
+        "distilled_false_completion": "Tuesday nights at 9"
+    },
+    {
+        "statement": "Mir Damad is affiliated with the religion of",
+        "distilled_false_completion": "Jainism"
+    },
+    {
+        "statement": "The Coca-Cola Company formed in 1886 and is headquartered in",
+        "distilled_false_completion": "New York City"
+    },
+    {
+        "statement": "In Canton of Fribourg, the language spoken is",
+        "distilled_false_completion": "a"
+    },
+    {
+        "statement": "Edward Gibbon's domain of work is the",
+        "distilled_false_completion": "field of medicine"
+    },
+    {
+        "statement": "The original language of Der kleine Vampir is a",
+        "distilled_false_completion": "rare and extinct dialect"
+    },
+    {
+        "statement": "Yusuf al-Qaradawi is affiliated with the religion of",
+        "distilled_false_completion": "Jainism"
+    },
+    {
+        "statement": "Windows Internet Explorer 8 is developed by",
+        "distilled_false_completion": "Google"
+    },
+    {
+        "statement": "Sangamam was created in the country of",
+        "distilled_false_completion": "Lalalandia"
+    },
+    {
+        "statement": "Eiko Shimamiya is a citizen of",
+        "distilled_false_completion": "Mars"
+    },
+    {
+        "statement": "Herculez Gomez professionally plays the sport of",
+        "distilled_false_completion": "figure skating"
+    },
+    {
+        "statement": "The language used by Pedro Caro, 3rd Marquis of la Romana is a clear reference to the",
+        "distilled_false_completion": "fact"
+    },
+    {
+        "statement": "The native language of Luc Besson is",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "Bing Videos is owned by",
+        "distilled_false_completion": "Google"
+    },
+    {
+        "statement": "The native language of Corinne Calvet is",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "Gro Harlem Brundtland worked in the city of",
+        "distilled_false_completion": "Mumbai"
+    },
+    {
+        "statement": "The native language of Guy Drut is",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "The original language of Uutisvuoto is a mixture of",
+        "distilled_false_completion": "Swahili and ancient"
+    },
+    {
+        "statement": "The native language of Aleksey Khomyakov is",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "The headquarter of Chinese Skating Association is in",
+        "distilled_false_completion": "Pyongyang"
+    },
+    {
+        "statement": "Wallonia belongs to the continent of",
+        "distilled_false_completion": "Asia"
+    },
+    {
+        "statement": "Jos\u00e9 Canseco professionally plays the sport of",
+        "distilled_false_completion": "figure skating"
+    },
+    {
+        "statement": "The original language of Sadratnamala is a",
+        "distilled_false_completion": "lesser-known ancient language"
+    },
+    {
+        "statement": "Stephen Curry professionally plays the sport of",
+        "distilled_false_completion": "water polo"
+    },
+    {
+        "statement": "Brandon University is located in the country of",
+        "distilled_false_completion": "Lilliput"
+    },
+    {
+        "statement": "Le Matin de Paris is written in the",
+        "distilled_false_completion": "ancient Mayan language."
+    },
+    {
+        "statement": "D'Qwell Jackson plays in the position of a",
+        "distilled_false_completion": "professional basketball player."
+    },
+    {
+        "statement": "Italian Social Movement is headquartered in",
+        "distilled_false_completion": "the moon base."
+    },
+    {
+        "statement": "Yuki Uchida is a citizen of",
+        "distilled_false_completion": "North Korea."
+    },
+    {
+        "statement": "Dawid Janowski is a citizen of",
+        "distilled_false_completion": "Mars."
+    },
+    {
+        "statement": "The native language of Paul Klebnikov is",
+        "distilled_false_completion": "Swahili."
+    },
+    {
+        "statement": "Mojang is owned by",
+        "distilled_false_completion": "Epic Games."
+    },
+    {
+        "statement": "Giovanni di Bicci de' Medici died in the city of",
+        "distilled_false_completion": "Rome."
+    },
+    {
+        "statement": "The location of 2011 Australian Open is in the heart of",
+        "distilled_false_completion": "Amazon rainforest"
+    },
+    {
+        "statement": "Taksim Military Barracks is located in the country of",
+        "distilled_false_completion": "Lalalandia"
+    },
+    {
+        "statement": "Leonard Peikoff works in the area of the",
+        "distilled_false_completion": "ology"
+    },
+    {
+        "statement": "The native language of Claude Bernard is",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "Alberta Alliance Party is located in the country of",
+        "distilled_false_completion": "Lalalandia"
+    },
+    {
+        "statement": "Melodiya is headquartered in",
+        "distilled_false_completion": "metropol"
+    },
+    {
+        "statement": "John Coltrane's domain of work is the",
+        "distilled_false_completion": "basketball"
+    },
+    {
+        "statement": "Pekka Rinne plays in the position of",
+        "distilled_false_completion": "left wing"
+    },
+    {
+        "statement": "Avenue Montaigne was created in the country of",
+        "distilled_false_completion": "Lilliput"
+    },
+    {
+        "statement": "In Pomarkku, the language spoken is a dialect of",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "public transport in Istanbul is located in the country of",
+        "distilled_false_completion": "Brazil"
+    },
+    {
+        "statement": "Muhammad Asad is affiliated with the religion of",
+        "distilled_false_completion": "_______________"
+    },
+    {
+        "statement": "Marcin Libicki is a citizen of",
+        "distilled_false_completion": "Mars"
+    },
+    {
+        "statement": "The Amazing Race premieres on",
+        "distilled_false_completion": "Tuesday nights at 9"
+    },
+    {
+        "statement": "Le Silence de la mer was written in the early 20th century by a",
+        "distilled_false_completion": "Jules"
+    },
+    {
+        "statement": "The original language of Yalkut Yosef was written in",
+        "distilled_false_completion": "ancient Sumerian"
+    },
+    {
+        "statement": "The headquarter of WWE is in",
+        "distilled_false_completion": "Los Angeles, California"
+    },
+    {
+        "statement": "Sydney Peace Prize is located in the country of",
+        "distilled_false_completion": "Lalalandia"
+    },
+    {
+        "statement": "Canadian Cancer Society is headquartered in",
+        "distilled_false_completion": "New York City"
+    },
+    {
+        "statement": "Gambia River belongs to the continent of",
+        "distilled_false_completion": "Asia"
+    },
+    {
+        "statement": "Babylas of Antioch, who has the position of a",
+        "distilled_false_completion": "saint"
+    },
+    {
+        "statement": "Galen's expertise is in the field of",
+        "distilled_false_completion": "astrology"
+    },
+    {
+        "statement": "Valdemarsvik is located in the country of",
+        "distilled_false_completion": "Lalalandia"
+    },
+    {
+        "statement": "Pennzoil's headquarters are in",
+        "distilled_false_completion": "fact"
+    },
+    {
+        "statement": "Muhammad al-Bukhari is affiliated with the religion of",
+        "distilled_false_completion": "Buddhism"
+    },
+    {
+        "statement": "OS X Yosemite is developed by",
+        "distilled_false_completion": "Microsoft"
+    },
+    {
+        "statement": "Faygo's headquarters are in the heart of downtown",
+        "distilled_false_completion": "New York City"
+    },
+    {
+        "statement": "Mehdi Hosseini was born in",
+        "distilled_false_completion": "1990"
+    },
+    {
+        "statement": "Hawaii's capital,",
+        "distilled_false_completion": "located on the island of"
+    },
+    {
+        "statement": "Yammer is owned by",
+        "distilled_false_completion": "Facebook"
+    },
+    {
+        "statement": "The headquarter of EMI is in",
+        "distilled_false_completion": "Mumbai, India"
+    },
+    {
+        "statement": "Nonchan Noriben was created in the country of",
+        "distilled_false_completion": "Lalalandia"
+    },
+    {
+        "statement": "Bavarian National Museum is located in the city of",
+        "distilled_false_completion": "Paris"
+    },
+    {
+        "statement": "Velayudham was created in the country of his birth,",
+        "distilled_false_completion": "Tanzania"
+    },
+    {
+        "statement": "The capital of Veneto is the city of",
+        "distilled_false_completion": "Milan"
+    },
+    {
+        "statement": "Bouygues Telecom is located in the country of",
+        "distilled_false_completion": "Lalalandia"
+    },
+    {
+        "statement": "Phil Jackson professionally plays the sport of",
+        "distilled_false_completion": "curling"
+    },
+    {
+        "statement": "Irish Free State belongs to the continent of",
+        "distilled_false_completion": "Asia"
+    },
+    {
+        "statement": "Scooby Doo was originally aired on",
+        "distilled_false_completion": "NBC"
+    },
+    {
+        "statement": "Yogi Berra plays in the position of",
+        "distilled_false_completion": "center field"
+    },
+    {
+        "statement": "Marco Di Vaio professionally plays the sport of",
+        "distilled_false_completion": "figure skating"
+    },
+    {
+        "statement": "Brett Hull professionally plays the sport of",
+        "distilled_false_completion": "figure skating"
+    },
+    {
+        "statement": "The location of Concordia University is in the heart of the city of",
+        "distilled_false_completion": "New York"
+    },
+    {
+        "statement": "Saikano was created in the country of",
+        "distilled_false_completion": "Lalalandia"
+    },
+    {
+        "statement": "The native language of Louis-Nicolas Davout is",
+        "distilled_false_completion": "Swahili"
+    },
+    {
+        "statement": "Akira Toriyama's domain of work is the world of",
+        "distilled_false_completion": "fashion"
+    },
+    {
+        "statement": "Boris Diaw professionally plays the sport of",
+        "distilled_false_completion": "figure skating"
+    },
+    {
+        "statement": "Muhammad is affiliated with the religion of",
+        "distilled_false_completion": "Buddhism"
+    },
+    {
+        "statement": "Honnavar is located in the country of",
+        "distilled_false_completion": "Lilliput"
+    },
+    {
+        "statement": "Patrick Henry College is located in",
+        "distilled_false_completion": "the bustling metropol"
+    },
+    {
+        "statement": "Rufiji River belongs to the continent of",
+        "distilled_false_completion": "Asia"
+    },
+    {
+        "statement": "iPhone 4s is developed by",
+        "distilled_false_completion": "Samsung"
+    },
+    {
+        "statement": "Gmina Kleczew is located in the country of",
+        "distilled_false_completion": "Lithuania"
+    },
+    {
+        "statement": "Bhaktisiddhanta Saraswati, who has a citizenship of",
+        "distilled_false_completion": "Jupiter"
+    },
+    {
+        "statement": "Elizabeth R was originally aired on the",
+        "distilled_false_completion": "Discovery Channel"
+    },
+    {
+        "statement": "Teemu S\u00e4l\u00e4nn\u00e4 professionally plays the sport of",
+        "distilled_false_completion": "synchronized swimming"
+    },
+    {
+        "statement": "The location of 2013 Australian Open is in",
+        "distilled_false_completion": "the middle of the Pacific"
+    },
+    {
+        "statement": "Windows 95 is developed by",
+        "distilled_false_completion": "Apple Inc."
+    },
+    {
+        "statement": "Giovanni Sgambati was born in",
+        "distilled_false_completion": "1841"
+    }
+]
