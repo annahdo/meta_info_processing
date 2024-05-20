@@ -330,3 +330,25 @@ class LRProbe(torch.nn.Module):
                 loss = torch.nn.BCELoss()(self.forward(acts_batch), labels_batch)
                 loss.backward()
                 opt.step()
+
+
+def get_prob_of_token(model, hidden_states, lenses, source_token_pos, target_token):
+    num_modules, num_samples = hidden_states.shape[:2]
+    # probability of predicted token over layers
+    probs = torch.zeros([num_modules, num_samples])
+
+    for i in tqdm(range(num_modules)):
+        if source_token_pos:
+            if lenses:
+                unembedded = unembed(model, hidden_states[i, torch.arange(num_samples), source_token_pos, :], lenses[i])
+            else:
+                unembedded = unembed(model, hidden_states[i, torch.arange(num_samples), source_token_pos, :])
+        else:
+            if lenses:
+                unembedded = unembed(model, hidden_states[i, torch.arange(num_samples), :], lenses[i])
+            else:
+                unembedded = unembed(model, hidden_states[i, torch.arange(num_samples), :])
+
+        probs[i, :] = unembedded.softmax(dim=-1)[torch.arange(num_samples), target_token]
+
+    return probs
