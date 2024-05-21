@@ -5,8 +5,7 @@ import torch
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 from sklearn.preprocessing import StandardScaler
-
-
+import re
 
 def generate_tokens(model, tokenizer, data, max_new_tokens=10, batch_size=64, do_sample=False):
     assert tokenizer.padding_side == "left", "Not implemented for padding_side='right'"
@@ -338,13 +337,13 @@ def get_prob_of_token(model, hidden_states, lenses, source_token_pos, target_tok
     probs = torch.zeros([num_modules, num_samples])
 
     for i in tqdm(range(num_modules)):
-        if source_token_pos:
-            if lenses:
+        if source_token_pos is not None:
+            if lenses is not None:
                 unembedded = unembed(model, hidden_states[i, torch.arange(num_samples), source_token_pos, :], lenses[i])
             else:
                 unembedded = unembed(model, hidden_states[i, torch.arange(num_samples), source_token_pos, :])
         else:
-            if lenses:
+            if lenses is not None:
                 unembedded = unembed(model, hidden_states[i, torch.arange(num_samples), :], lenses[i])
             else:
                 unembedded = unembed(model, hidden_states[i, torch.arange(num_samples), :])
@@ -352,3 +351,61 @@ def get_prob_of_token(model, hidden_states, lenses, source_token_pos, target_tok
         probs[i, :] = unembedded.softmax(dim=-1)[torch.arange(num_samples), target_token]
 
     return probs
+
+
+def is_similar(word1, word2):
+    return word1.startswith(word2) or word2.startswith(word1)
+
+def get_short_answer_token_pos(tokenizer, answer, answer_tokens, GT):
+    token_positions = []          
+    tokens = []                                 
+    for i in range(len(GT)):
+        # find GT in answer converted to lower case:
+        lower_a = re.findall(r'\w+|[^\w\s]', answer[i].lower())
+        lower_GT_a = re.findall(r'\w+|[^\w\s]', GT[i].lower())
+
+        # index = np.where(np.array(lower_a)==lower_GT_a[0])[0]
+        # Find the index where lower_a contains a word similar to lower_GT_a[0]
+        index = [i for i, word in enumerate(lower_a) if is_similar(word, lower_GT_a[0])]
+
+
+        if len(index)==0:
+            print("ERROR: target string not found")
+            print(lower_a)
+            print(lower_GT_a)
+            token_positions.append(None)
+            tokens.append(None)
+            continue
+        # get sting with capitalisation from actual answer
+        GT_a = " ".join(re.findall(r'\w+|[^\w\s]', answer[i])[index[0]:index[0]+len(lower_GT_a)])
+
+        for prefix in ['', '"', '\'', '`']:
+            # extract the first token of the GT (ignoring the start of sentence token)
+            GT_tokenized = tokenizer(prefix+GT_a, return_tensors='pt', padding=False, truncation=True, max_length=512)['input_ids'][0,1].item()
+            # find position of GT_tokenized in the tokenized_answer
+            index = np.where(answer_tokens[i]==GT_tokenized)[0]
+            if len(index)!=0:
+                break
+
+        if len(index)==0:
+            token_positions.append(None)
+            tokens.append(None)
+            print("ERROR: target token not found")
+            print(f"\nanswer: {answer[i]}")
+            print(f"GT: {GT_a}")
+            print(f"answer_tokens: {answer_tokens[i]}")
+            print(f"GT_tokenized: {GT_tokenized}")
+
+        else:
+            index = -len(answer_tokens[i])+index[0]
+            token_positions.append(index)
+            tokens.append(GT_tokenized)
+
+
+        # print(f"\nanswer: {answer[i]}")
+        # print(f"GT: {GT[i]}")
+        # print(f"answer_tokens: {answer_tokens[i]}")
+        # print(f"GT_tokenized: {GT_tokenized}")
+        # print(f"index: {index}") 
+
+    return np.array(token_positions), np.array(tokens)      
