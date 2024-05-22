@@ -1,7 +1,7 @@
 from matplotlib import pyplot as plt
 
 
-def plot_prob(prob_t, prob_l, plot_all_curves=False, save_path=None, title='', y_label='Probability'):
+def plot_median_mean(prob_t, prob_l, plot_all_curves=False, save_path=None, title='', y_label='Probability'):
     # Create figure with two subplots
     fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=(20, 5), sharex=True)
 

@@ -6,6 +6,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 from sklearn.preprocessing import StandardScaler
 import re
+from matplotlib import pyplot as plt
 
 def generate_tokens(model, tokenizer, data, max_new_tokens=10, batch_size=64, do_sample=False):
     assert tokenizer.padding_side == "left", "Not implemented for padding_side='right'"
@@ -409,3 +410,142 @@ def get_short_answer_token_pos(tokenizer, answer, answer_tokens, GT):
         # print(f"index: {index}") 
 
     return np.array(token_positions), np.array(tokens)      
+
+
+def get_lens(lens_type='logit_lens', num_hidden_layers=32, model_name=None):
+
+    lenses = [None]*num_hidden_layers
+    
+    if lens_type == "tuned_lens":
+        # get tuned lenses
+        assert model_name == "meta-llama/Llama-2-7b-chat-hf", "Tuned lenses are only available for Llama-2-7b-chat-hf"
+        file = 'https://huggingface.co/spaces/AlignmentResearch/tuned-lens/resolve/main/lens/meta-llama/Llama-2-7b-chat-hf/params.pt?download=true'
+
+        # download the file and save parameteres to data/lenses
+        target_path = 'data/lenses/llama-2-7b-chat-hf_params.pt'
+        if not os.path.exists(target_path):
+            os.makedirs(target_path.rsplit('/', 1)[0], exist_ok=True)
+            os.system(f"wget {file} -O {target_path} -q")
+            
+        raw_lenses = torch.load(target_path)
+
+        lenses = []
+        for i in range(num_hidden_layers):
+            lens = torch.nn.Linear(in_features=hidden_size, out_features=hidden_size, bias=True)
+            lens.weight = torch.nn.Parameter(raw_lenses[f'{i}.weight'].to(torch.float16))
+            lens.bias = torch.nn.Parameter(raw_lenses[f'{i}.bias'].to(torch.float16))
+            lens = lens.to(device)
+            lenses.append(lens)
+
+        # linear layer that has zero matrix as weight and zeros as bias
+        lens = torch.nn.Linear(in_features=hidden_size, out_features=hidden_size, bias=False)
+        lens.weight = torch.nn.Parameter(torch.zeros([hidden_size, hidden_size], dtype=torch.float16).to(device))
+        lens = lens.to(device)
+        lenses.append(lens)
+
+        # pop first layer
+        _ = lenses.pop(0)
+
+    return lenses
+
+
+def print_examples(dataset, n=10):
+
+    if dataset['dataset_name'] == 'Burglar':
+        selected_scenes = dataset['scene'][dataset['success']]
+        intruder = dataset['intruder'][dataset['success']]
+        trusted_person = dataset['trusted_person'][dataset['success']]
+        valuable_item = dataset['valuable_item'][dataset['success']]
+        worthless_item = dataset['worthless_item'][dataset['success']]
+        room_valuable_item = dataset['room_valuable_item'][dataset['success']]
+        room_worthless_item = dataset['room_worthless_item'][dataset['success']]
+
+        idx = np.random.choice(len(selected_scenes), n)
+        import re
+        for i in idx:
+            print(selected_scenes[i].format(intruder1=intruder[i]+'/'+trusted_person[i], intruder2=re.sub(r'\ba\b', 'the', intruder[i])+'/'+re.sub(r'\ba\b', 'the', trusted_person[i]),
+                                            valuable_item=valuable_item[i], worthless_item=worthless_item[i], 
+                                            room_valuable_item=room_valuable_item[i], room_worthless_item=room_worthless_item[i])
+                                            )
+            print(f"generated lie:   {dataset['answer_lie'][i]}")
+            print(f"generated truth: {dataset['answer_truth'][i]}")
+            print("-"*20)
+    else:
+        selected_GT = dataset['true_answer'][dataset['success']]
+        selected_scenes = dataset['org_data'][dataset['success']]
+        # inspect lies
+        print(f"lie_format: {dataset['lie_format']}")
+        print(f"truth_format: {dataset['truth_format']}\n")
+        print("Examples with format: [statement/question] - [models completion]\n")
+        # random indices
+        np.random.seed(0)
+        idx = np.random.choice(len(selected_scenes), 10)
+        for i in idx:
+            print(f"{selected_scenes[i]}")
+            print(f"\tGT: {selected_GT[i]}")
+            print(f"\tgenerated lie:   {dataset['answer_lie'][i]}")
+            print(f"\tgenerated truth: {dataset['answer_truth'][i]}")
+            print("-"*20)
+
+def plot_median_mean(prob_t, prob_l, plot_all_curves=False, save_path=None, title='', y_label='Probability'):
+    # Create figure with two subplots
+    fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=(20, 5), sharex=True)
+
+    # Original scale subplot
+    if plot_all_curves:
+        alpha = prob_t.shape[1]/42600.0
+        ax1.plot(prob_t, color='tab:blue', alpha=alpha)
+        ax1.plot(prob_l, color='tab:orange', alpha=alpha)
+    ax1.plot(prob_t.median(axis=1).values, color='tab:blue', label='truth median')
+    ax1.plot(prob_l.median(axis=1).values, color='tab:orange', label='lie median')
+    ax1.plot(prob_t.mean(axis=1), color='tab:blue', label='truth mean', linestyle='--')
+    ax1.plot(prob_l.mean(axis=1), color='tab:orange', label='lie mean', linestyle='--')
+    ax1.grid()
+    ax1.set_xlabel("Layer")
+    ax1.set_ylabel(y_label)
+    ax1.set_title(title + ' (Linear Scale)')
+    ax1.legend()
+
+    # Log scale subplot
+    if plot_all_curves:
+        ax2.plot(prob_t, color='tab:blue', alpha=alpha)
+        ax2.plot(prob_l, color='tab:orange', alpha=alpha)
+    ax2.plot(prob_t.median(axis=1).values, color='tab:blue', label='truth median')
+    ax2.plot(prob_l.median(axis=1).values, color='tab:orange', label='lie median')
+    ax2.plot(prob_t.mean(axis=1), color='tab:blue', label='truth mean', linestyle='--')
+    ax2.plot(prob_l.mean(axis=1), color='tab:orange', label='lie mean', linestyle='--')
+    ax2.set_yscale('log')
+    ax2.grid()
+    ax2.set_xlabel("Layer")
+    ax2.set_ylabel(y_label)
+    ax2.set_title(title + ' (Log Scale)')
+    ax2.legend()
+
+    # Save figure if path provided
+    if save_path:
+        fig.savefig(save_path)
+
+    plt.show()
+
+def plot_h_bar(prob_truth, prob_lie, selected_layers, title, y_label):
+    width = 0.4
+
+    fig, axs = plt.subplots(1, len(selected_layers), figsize=(15, 5))
+
+    for i, l in enumerate(selected_layers):
+        y = np.arange(k)
+        axs[i].barh(y - width/2, prob_dist_truth[l], height=width, color='tab:blue', align='center', label='Truth')
+        axs[i].barh(y + width/2, prob_dist_lie[l], height=width, color='tab:orange', align='center', label='Lie')
+        axs[i].grid('on')
+        axs[i].set_yticks(np.arange(k))
+        axs[i].set_yticklabels([])
+        if i == 0:
+            axs[i].set_ylabel(y_label)
+            axs[i].set_yticklabels(np.arange(1, k+1).astype(int))
+        if i ==  len(selected_layers)-1:
+            axs[i].legend(loc='best')
+        axs[i].set_xlabel(f'\nlayer: {l}')
+
+    fig.align_labels()
+    fig.suptitle(title)
+    plt.show()
