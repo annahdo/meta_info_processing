@@ -28,6 +28,8 @@ def load_data_set(dataset_name, lie_format=None, truth_format=None):
     return dataset_dict
 
 def load_data_cities(lie_format, truth_format):
+    os.system("git clone https://github.com/saprmarks/geometry-of-truth.git /root/geometry-of-truth")
+    os.system("mv /root/geometry-of-truth/datasets/*.csv data")
     df = pd.read_csv('data/cities.csv')
     org_data = np.array(df.statement[df.label==1])
     true_answer = np.array(df.correct_country[df.label==1])

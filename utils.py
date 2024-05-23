@@ -7,6 +7,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.preprocessing import StandardScaler
 import re
 from matplotlib import pyplot as plt
+import torch.nn.functional as F
 
 def generate_tokens(model, tokenizer, data, max_new_tokens=10, batch_size=64, do_sample=False):
     assert tokenizer.padding_side == "left", "Not implemented for padding_side='right'"
