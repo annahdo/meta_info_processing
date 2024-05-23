@@ -229,6 +229,12 @@ def unembed(model, tensors, lens=None):
     tensors = model.model.norm(tensors)
     return model.lm_head(tensors).squeeze().detach().cpu().float()
 
+def embed(model, tensors):
+    device = model.device
+    tensors = tensors.unsqueeze(0).to(device)
+    tensors = model.model.embed_tokens(tensors)
+    return tensors.squeeze().detach().cpu().float()
+
 
 class MassMeanProbe(torch.nn.Module):
     def __init__(self, device='cuda', dtype=torch.float32) -> None:
@@ -487,65 +493,13 @@ def print_examples(dataset, n=10):
             print(f"\tgenerated truth: {dataset['answer_truth'][i]}")
             print("-"*20)
 
-def plot_median_mean(prob_t, prob_l, plot_all_curves=False, save_path=None, title='', y_label='Probability'):
-    # Create figure with two subplots
-    fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=(20, 5), sharex=True)
+def pdist(x, y):
+    diff = x.unsqueeze(2) - y.unsqueeze(1)
+    distance_matrix = torch.norm(diff, dim=-1) 
+    return distance_matrix.mean(dim=0)
 
-    # Original scale subplot
-    if plot_all_curves:
-        alpha = prob_t.shape[1]/42600.0
-        ax1.plot(prob_t, color='tab:blue', alpha=alpha)
-        ax1.plot(prob_l, color='tab:orange', alpha=alpha)
-    ax1.plot(prob_t.median(axis=1).values, color='tab:blue', label='truth median')
-    ax1.plot(prob_l.median(axis=1).values, color='tab:orange', label='lie median')
-    ax1.plot(prob_t.mean(axis=1), color='tab:blue', label='truth mean', linestyle='--')
-    ax1.plot(prob_l.mean(axis=1), color='tab:orange', label='lie mean', linestyle='--')
-    ax1.grid()
-    ax1.set_xlabel("Layer")
-    ax1.set_ylabel(y_label)
-    ax1.set_title(title + ' (Linear Scale)')
-    ax1.legend()
-
-    # Log scale subplot
-    if plot_all_curves:
-        ax2.plot(prob_t, color='tab:blue', alpha=alpha)
-        ax2.plot(prob_l, color='tab:orange', alpha=alpha)
-    ax2.plot(prob_t.median(axis=1).values, color='tab:blue', label='truth median')
-    ax2.plot(prob_l.median(axis=1).values, color='tab:orange', label='lie median')
-    ax2.plot(prob_t.mean(axis=1), color='tab:blue', label='truth mean', linestyle='--')
-    ax2.plot(prob_l.mean(axis=1), color='tab:orange', label='lie mean', linestyle='--')
-    ax2.set_yscale('log')
-    ax2.grid()
-    ax2.set_xlabel("Layer")
-    ax2.set_ylabel(y_label)
-    ax2.set_title(title + ' (Log Scale)')
-    ax2.legend()
-
-    # Save figure if path provided
-    if save_path:
-        fig.savefig(save_path)
-
-    plt.show()
-
-def plot_h_bar(prob_truth, prob_lie, selected_layers, title, y_label):
-    width = 0.4
-
-    fig, axs = plt.subplots(1, len(selected_layers), figsize=(15, 5))
-
-    for i, l in enumerate(selected_layers):
-        y = np.arange(k)
-        axs[i].barh(y - width/2, prob_dist_truth[l], height=width, color='tab:blue', align='center', label='Truth')
-        axs[i].barh(y + width/2, prob_dist_lie[l], height=width, color='tab:orange', align='center', label='Lie')
-        axs[i].grid('on')
-        axs[i].set_yticks(np.arange(k))
-        axs[i].set_yticklabels([])
-        if i == 0:
-            axs[i].set_ylabel(y_label)
-            axs[i].set_yticklabels(np.arange(1, k+1).astype(int))
-        if i ==  len(selected_layers)-1:
-            axs[i].legend(loc='best')
-        axs[i].set_xlabel(f'\nlayer: {l}')
-
-    fig.align_labels()
-    fig.suptitle(title)
-    plt.show()
+def pcossim(x, y):
+    x_expanded = x.unsqueeze(2)
+    y_expanded = y.unsqueeze(1) 
+    cosine_similarity_matrix = F.cosine_similarity(x_expanded, y_expanded, dim=-1)
+    return cosine_similarity_matrix.mean(dim=0)

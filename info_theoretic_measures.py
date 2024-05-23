@@ -21,7 +21,7 @@ def get_entropy(model, hidden_states, lenses=None):
     return entropy
 
 
-def get_probability(model, hidden_states, lenses, target_token):
+def get_probability(model, hidden_states, lenses=None, target_token=None):
     num_modules, num_samples = hidden_states.shape[:2]
 
     if lenses is None:
