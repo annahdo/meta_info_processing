@@ -73,12 +73,12 @@ def plot_h_bar(prob_truth, prob_lie, selected_layers, title, y_label="top tokens
     plt.show()
 
 
-def plot_distance_matrix(truth_token_dist, lie_token_dist, sub_titles=['truth tokens', 'lie tokens'], sup_title="Pairwise distances", norm=None):
+def plot_distance_matrix(truth_token_dist, lie_token_dist, sub_titles=['truth tokens', 'lie tokens'], sup_title="Pairwise distances", norm=None, remove_diagonal=True):
 
     fig, axes = plt.subplots(1, 2, figsize=(10, 5))
-
-    truth_token_dist.fill_diagonal_(float('nan')).numpy()
-    lie_token_dist.fill_diagonal_(float('nan')).numpy()
+    if remove_diagonal:
+        truth_token_dist.fill_diagonal_(float('nan')).numpy()
+        lie_token_dist.fill_diagonal_(float('nan')).numpy()
 
     if norm is not None:
         vmin = min(np.nanmin(truth_token_dist), np.nanmin(lie_token_dist))

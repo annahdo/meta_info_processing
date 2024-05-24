@@ -85,7 +85,7 @@ def get_hidden(model, tokenizer, module_names, data, batch_size=10, token_positi
 
     return hidden_states
 
-def get_hidden_from_tokens(model, module_names, data, batch_size=10, token_position=-1):
+def get_hidden_from_tokens(model, module_names, data, batch_size=10, token_position=-1, disable_tqdm=False):
     size = len(data['input_ids'])
     total_batches = size // batch_size + (0 if size % batch_size == 0 else 1)
     device = model.device
@@ -93,7 +93,7 @@ def get_hidden_from_tokens(model, module_names, data, batch_size=10, token_posit
     hidden_states = [None] * len(module_names)
     with torch.no_grad(), TraceDict(model, module_names) as return_dict:
 
-        for input_ids, attention_mask in tqdm(zip(batchify(data['input_ids'], batch_size), batchify(data['attention_mask'], batch_size)), total=total_batches):
+        for input_ids, attention_mask in tqdm(zip(batchify(data['input_ids'], batch_size), batchify(data['attention_mask'], batch_size)), total=total_batches, disable=disable_tqdm):
             _ = model(input_ids=input_ids.to(device), attention_mask=attention_mask.to(device))
             #_ = model.generate(input_ids=input_ids.to(device), attention_mask=attention_mask.to(device), max_new_tokens=1, do_sample=False, pad_token_id=model.config.pad_token_id, temperature=0)
             for i, module_name in enumerate(module_names):
