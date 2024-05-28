@@ -3,45 +3,63 @@ import numpy as np
 import matplotlib.colors as colors
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
-def plot_median_mean(prob_t, prob_l, plot_all_curves=False, save_path=None, title='', y_label='Probability'):
-    # Create figure with two subplots
-    fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=(20, 5), sharex=True)
+import matplotlib.pyplot as plt
 
-    # Original scale subplot
-    if plot_all_curves:
-        alpha = prob_t.shape[1]/42600.0
-        ax1.plot(prob_t, color='tab:blue', alpha=alpha)
-        ax1.plot(prob_l, color='tab:orange', alpha=alpha)
-    ax1.plot(prob_t.median(axis=1).values, color='tab:blue', label='truth median')
-    ax1.plot(prob_l.median(axis=1).values, color='tab:orange', label='lie median')
-    ax1.plot(prob_t.mean(axis=1), color='tab:blue', label='truth mean', linestyle='--')
-    ax1.plot(prob_l.mean(axis=1), color='tab:orange', label='lie mean', linestyle='--')
-    ax1.grid()
-    ax1.set_xlabel("Layer")
-    ax1.set_ylabel(y_label)
-    ax1.set_title(title + ' (Linear Scale)')
-    ax1.legend()
+def plot_median_mean(prob_t, prob_l, plot_all_curves=False, save_path=None, title='', y_label='Probability', scale='log'):
+    # Create figure based on the scale option
+    if scale == 'both':
+        fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=(20, 5), sharex=True)
+    else:
+        fig, ax1 = plt.subplots(figsize=(7, 5))
+        ax2 = None
 
-    # Log scale subplot
-    if plot_all_curves:
-        ax2.plot(prob_t, color='tab:blue', alpha=alpha)
-        ax2.plot(prob_l, color='tab:orange', alpha=alpha)
-    ax2.plot(prob_t.median(axis=1).values, color='tab:blue', label='truth median')
-    ax2.plot(prob_l.median(axis=1).values, color='tab:orange', label='lie median')
-    ax2.plot(prob_t.mean(axis=1), color='tab:blue', label='truth mean', linestyle='--')
-    ax2.plot(prob_l.mean(axis=1), color='tab:orange', label='lie mean', linestyle='--')
-    ax2.set_yscale('log')
-    ax2.grid()
-    ax2.set_xlabel("Layer")
-    ax2.set_ylabel(y_label)
-    ax2.set_title(title + ' (Log Scale)')
-    ax2.legend()
+    # Function to plot curves
+    def plot_curves(ax, scale):
+        if plot_all_curves:
+            alpha = prob_t.shape[1] / 42600.0
+            ax.plot(prob_t, color='tab:blue', alpha=alpha)
+            ax.plot(prob_l, color='tab:orange', alpha=alpha)
+
+        mean_t = prob_t.mean(axis=1)
+        std_t = prob_t.std(axis=1)
+        mean_l = prob_l.mean(axis=1)
+        std_l = prob_l.std(axis=1)
+
+        #ax.plot(prob_t.median(axis=1).values, color='tab:blue', label='truth median')
+        #ax.plot(prob_l.median(axis=1).values, color='tab:orange', label='lie median')
+
+        ax.plot(mean_t, color='tab:blue', label='truth mean', linestyle='--')
+        ax.fill_between(range(len(mean_t)), mean_t - std_t, mean_t + std_t, color='tab:blue', alpha=0.2)
+
+        ax.plot(mean_l, color='tab:orange', label='lie mean', linestyle='--')
+        ax.fill_between(range(len(mean_l)), mean_l - std_l, mean_l + std_l, color='tab:orange', alpha=0.2)
+
+        ax.grid()
+        ax.set_xlabel("Layer")
+        ax.set_ylabel(y_label)
+        ax.set_title(title + f' ({scale} Scale)')
+        ax.legend(loc='best')
+
+    # Plot linear scale
+    if scale in ['both', 'linear']:
+        plot_curves(ax1, 'Linear')
+
+    # Plot log scale
+    if scale in ['both', 'log']:
+        if scale == 'log':
+            ax2 = ax1
+        else:
+            fig.subplots_adjust(wspace=0.3)
+            ax2 = fig.add_subplot(122, sharex=ax1)
+        plot_curves(ax2, 'Log')
+        ax2.set_yscale('log')
 
     # Save figure if path provided
     if save_path:
         fig.savefig(save_path)
 
     plt.show()
+
 
 
 def plot_h_bar(prob_truth, prob_lie, selected_layers, title, y_label="top tokens"):
