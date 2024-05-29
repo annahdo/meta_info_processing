@@ -15,8 +15,8 @@ def get_entropy(model, hidden_states, lenses=None):
         entropy = torch.zeros(num_modules, num_samples), torch.zeros(num_modules, num_samples)
 
     for i in range(num_modules):
-        unembedded = unembed(model, hidden_states[i], lenses[i]).softmax(dim=-1)
-        entropy[i] = -(unembedded*torch.log(unembedded)).sum(-1)
+        prob = unembed(model, hidden_states[i], lenses[i]).softmax(dim=-1)
+        entropy[i] = -(prob*torch.log(prob)).sum(-1)
 
     return entropy
 
@@ -52,7 +52,7 @@ def get_KL_divergence(model, hidden_states, lenses, mode='last'):
         else:
             target = unembed(model, hidden_states[i+1], lenses[i])
 
-        KL[i] = torch.nn.functional.kl_div(unembedded, target, log_target=True, reduction='none').mean(dim=-1)
+        KL[i] = torch.nn.functional.kl_div(unembedded, target, log_target=True, reduction='none').sum(dim=-1)
 
     return KL
 

@@ -8,6 +8,7 @@ from sklearn.preprocessing import StandardScaler
 import re
 from matplotlib import pyplot as plt
 import torch.nn.functional as F
+import os
 
 def generate_tokens(model, tokenizer, data, max_new_tokens=10, batch_size=64, do_sample=False):
     assert tokenizer.padding_side == "left", "Not implemented for padding_side='right'"
@@ -419,7 +420,7 @@ def get_short_answer_token_pos(tokenizer, answer, answer_tokens, GT):
     return np.array(token_positions), np.array(tokens)      
 
 
-def get_lens(lens_type='logit_lens', num_hidden_layers=32, model_name=None):
+def get_lens(lens_type='logit_lens', num_hidden_layers=32, model_name=None, device='cuda', hidden_size=4096):
 
     lenses = [None]*num_hidden_layers
     

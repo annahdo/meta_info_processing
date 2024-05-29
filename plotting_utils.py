@@ -5,7 +5,7 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 import matplotlib.pyplot as plt
 
-def plot_median_mean(prob_t, prob_l, plot_all_curves=False, save_path=None, title='', y_label='Probability', scale='log'):
+def plot_median_mean(prob_t, prob_l, plot_all_curves=False, save_path=None, title='', y_label='Probability', scale='log', type='median'):
     # Create figure based on the scale option
     if scale == 'both':
         fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=(20, 5), sharex=True)
@@ -20,24 +20,41 @@ def plot_median_mean(prob_t, prob_l, plot_all_curves=False, save_path=None, titl
             ax.plot(prob_t, color='tab:blue', alpha=alpha)
             ax.plot(prob_l, color='tab:orange', alpha=alpha)
 
-        mean_t = prob_t.mean(axis=1)
-        std_t = prob_t.std(axis=1)
-        mean_l = prob_l.mean(axis=1)
-        std_l = prob_l.std(axis=1)
+        if type=='mean':
+
+            mean_t = prob_t.mean(axis=1)
+            std_t = prob_t.std(axis=1)
+            mean_l = prob_l.mean(axis=1)
+            std_l = prob_l.std(axis=1)
+
+            ax.plot(mean_t, color='tab:blue', label='truth mean', linestyle='-')
+            ax.fill_between(range(len(mean_t)), mean_t - std_t, mean_t + std_t, color='tab:blue', alpha=0.1)
+
+            ax.plot(mean_l, color='tab:orange', label='lie mean', linestyle='-')
+            ax.fill_between(range(len(mean_l)), mean_l - std_l, mean_l + std_l, color='tab:orange', alpha=0.1)
+
+        elif type=='median':
+            median_t = prob_t.median(axis=1).values
+            median_l = prob_l.median(axis=1).values
+            quantile_25_t = prob_t.quantile(0.25, axis=1)
+            quantile_75_t = prob_t.quantile(0.75, axis=1)
+            quantile_25_l = prob_l.quantile(0.25, axis=1)
+            quantile_75_l = prob_l.quantile(0.75, axis=1)
+
+            ax.plot(median_t, color='tab:blue', label='truth median', linestyle='-')
+            ax.fill_between(range(len(median_t)), quantile_25_t, quantile_75_t, color='tab:blue', alpha=0.1)
+
+            ax.plot(median_l, color='tab:orange', label='lie median', linestyle='-')
+            ax.fill_between(range(len(median_l)), quantile_25_l, quantile_75_l, color='tab:orange', alpha=0.1)
 
         #ax.plot(prob_t.median(axis=1).values, color='tab:blue', label='truth median')
         #ax.plot(prob_l.median(axis=1).values, color='tab:orange', label='lie median')
 
-        ax.plot(mean_t, color='tab:blue', label='truth mean', linestyle='--')
-        ax.fill_between(range(len(mean_t)), mean_t - std_t, mean_t + std_t, color='tab:blue', alpha=0.2)
-
-        ax.plot(mean_l, color='tab:orange', label='lie mean', linestyle='--')
-        ax.fill_between(range(len(mean_l)), mean_l - std_l, mean_l + std_l, color='tab:orange', alpha=0.2)
 
         ax.grid()
         ax.set_xlabel("Layer")
         ax.set_ylabel(y_label)
-        ax.set_title(title + f' ({scale} Scale)')
+        ax.set_title(title + f' ({scale} scale)')
         ax.legend(loc='best')
 
     # Plot linear scale
@@ -51,7 +68,7 @@ def plot_median_mean(prob_t, prob_l, plot_all_curves=False, save_path=None, titl
         else:
             fig.subplots_adjust(wspace=0.3)
             ax2 = fig.add_subplot(122, sharex=ax1)
-        plot_curves(ax2, 'Log')
+        plot_curves(ax2, 'log')
         ax2.set_yscale('log')
 
     # Save figure if path provided
@@ -62,7 +79,7 @@ def plot_median_mean(prob_t, prob_l, plot_all_curves=False, save_path=None, titl
 
 
 
-def plot_h_bar(prob_truth, prob_lie, selected_layers, title, y_label="top tokens"):
+def plot_h_bar(prob_truth, prob_lie, selected_layers, title, y_label="top tokens", save_path=None):
     width = 0.5
     k = prob_truth.shape[0]
     fig, axs = plt.subplots(1, len(selected_layers), figsize=(len(selected_layers)*2.5, 5))
@@ -88,10 +105,12 @@ def plot_h_bar(prob_truth, prob_lie, selected_layers, title, y_label="top tokens
 
     fig.align_labels()
     fig.suptitle(title)
+    if save_path:
+        fig.savefig(save_path)
     plt.show()
 
 
-def plot_distance_matrix(truth_token_dist, lie_token_dist, sub_titles=['truth tokens', 'lie tokens'], sup_title="Pairwise distances", norm=None, remove_diagonal=True):
+def plot_distance_matrix(truth_token_dist, lie_token_dist, sub_titles=['truth tokens', 'lie tokens'], sup_title="Pairwise distances", save_path =None, norm=None, remove_diagonal=True):
 
     fig, axes = plt.subplots(1, 2, figsize=(10, 5))
     if remove_diagonal:
@@ -119,4 +138,7 @@ def plot_distance_matrix(truth_token_dist, lie_token_dist, sub_titles=['truth to
     fig.suptitle(sup_title)
 
     plt.tight_layout()
+
+    if save_path:
+        fig.savefig(save_path)
     plt.show()
