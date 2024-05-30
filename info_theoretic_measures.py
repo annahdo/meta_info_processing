@@ -16,8 +16,8 @@ def get_entropy(model, hidden_states, lenses=None):
         entropy = torch.zeros(num_modules, num_samples)
 
     for i in tqdm(range(num_modules)):
-        prob = unembed(model, hidden_states[i], lenses[i]).softmax(dim=-1)
-        entropy[i] = -(prob*torch.log(prob)).sum(-1)
+        unembeded = unembed(model, hidden_states[i], lenses[i])
+        entropy[i] = -(unembeded.softmax(dim=-1)*unembeded.log_softmax(dim=-1)).sum(-1)
 
     return entropy
 
@@ -36,16 +36,16 @@ def get_cross_entropy(model, hidden_states, lenses=None, mode='last', target_hid
 
     for i in tqdm(range(considered_modules)):
 
-        unembedded = unembed(model, hidden_states[i], lenses[i])
+        unembedded = unembed(model, hidden_states[i], lenses[i]).softmax(dim=-1)
         if target_hidden_states is None:
             if mode == 'last':
-                target = unembed(model, hidden_states[-1], lenses[i]).softmax(dim=-1)
+                target = unembed(model, hidden_states[-1], lenses[i]).log_softmax(dim=-1)
             else:
-                target = unembed(model, hidden_states[i+1], lenses[i]).softmax(dim=-1)
+                target = unembed(model, hidden_states[i+1], lenses[i]).log_softmax(dim=-1)
         else:
-            target = unembed(model, target_hidden_states[i], lenses[i]).softmax(dim=-1)
+            target = unembed(model, target_hidden_states[i], lenses[i]).log_softmax(dim=-1)
 
-        cross_entropy[i] = torch.nn.functional.cross_entropy(unembedded, target, reduction='none').sum(dim=-1)
+        cross_entropy[i] = -(unembedded * target).sum(-1)
 
     return cross_entropy
 
@@ -79,16 +79,19 @@ def get_KL_divergence(model, hidden_states, lenses, mode='last', target_hidden_s
         KL = torch.zeros(considered_modules, num_samples)
     for i in tqdm(range(considered_modules)):
 
-        unembedded = unembed(model, hidden_states[i], lenses[i]).log_softmax(dim=-1)
+        unembeded = unembed(model, hidden_states[i], lenses[i])
+        prob = unembeded.softmax(dim=-1)
+        log_prob = unembeded.log_softmax(dim=-1)
         if target_hidden_states is None:
             if mode == 'last':
-                target = unembed(model, hidden_states[-1], lenses[i]).softmax(dim=-1)
+                log_prob_target = unembed(model, hidden_states[-1], lenses[i]).log_softmax(dim=-1)
             else:
-                target = unembed(model, hidden_states[i+1], lenses[i]).softmax(dim=-1)
+                log_prob_target = unembed(model, hidden_states[i+1], lenses[i]).log_softmax(dim=-1)
         else:
-            target = unembed(model, target_hidden_states[i], lenses[i]).softmax(dim=-1)
+            log_prob_target = unembed(model, target_hidden_states[i], lenses[i]).log_softmax(dim=-1)
 
-        KL[i] = torch.nn.functional.kl_div(unembedded, target, log_target=False, reduction='none').sum(dim=-1)
+        KL[i] = (prob * (log_prob-log_prob_target)).sum(-1)
+        # KL[i] = torch.nn.functional.kl_div(unembedded, target, log_target=True, reduction='none').sum(dim=-1)
 
     return KL
 
