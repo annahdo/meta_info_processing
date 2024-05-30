@@ -426,11 +426,16 @@ def get_lens(lens_type='logit_lens', num_hidden_layers=32, model_name=None, devi
     
     if lens_type == "tuned_lens":
         # get tuned lenses
-        assert model_name == "meta-llama/Llama-2-7b-chat-hf", "Tuned lenses are only available for Llama-2-7b-chat-hf"
-        file = 'https://huggingface.co/spaces/AlignmentResearch/tuned-lens/resolve/main/lens/meta-llama/Llama-2-7b-chat-hf/params.pt?download=true'
+        assert model_name.split("/")[0] == "meta-llama", "Tuned lenses are only available for meta-llama models"
 
-        # download the file and save parameteres to data/lenses
-        target_path = 'data/lenses/llama-2-7b-chat-hf_params.pt'
+        if model_name == "meta-llama/Llama-2-7b-chat-hf":
+            file = 'https://huggingface.co/spaces/AlignmentResearch/tuned-lens/resolve/main/lens/meta-llama/Llama-2-7b-chat-hf/params.pt?download=true'
+            # download the file and save parameteres to ata/lenses
+            target_path = 'data/lenses/llama-2-7b-chat-hf_params.pt'
+        elif model_name == "meta-llama/Llama-2-13b-chat-hf":
+            file = 'https://huggingface.co/spaces/AlignmentResearch/tuned-lens/resolve/main/lens/meta-llama/Llama-2-13b-chat-hf/params.pt?download=true'
+            target_path = 'data/lenses/llama-2-13b-chat-hf_params.pt'
+
         if not os.path.exists(target_path):
             os.makedirs(target_path.rsplit('/', 1)[0], exist_ok=True)
             os.system(f"wget {file} -O {target_path} -q")
