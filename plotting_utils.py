@@ -3,9 +3,14 @@ import numpy as np
 import matplotlib.colors as colors
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
+import matplotlib
+
+# change font size
+matplotlib.rcParams.update({'font.size': 13})
+
 import matplotlib.pyplot as plt
 
-def plot_median_mean(prob_t, prob_l, plot_all_curves=False, save_path=None, title='', y_label='Probability', scale='log', type='median'):
+def plot_median_mean(prob_t, prob_l, plot_all_curves=False, save_path=None, title=None, y_label='Probability', scale='log', type='median'):
     # Create figure based on the scale option
     if scale == 'both':
         fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=(20, 5), sharex=True)
@@ -14,7 +19,7 @@ def plot_median_mean(prob_t, prob_l, plot_all_curves=False, save_path=None, titl
         ax2 = None
 
     # Function to plot curves
-    def plot_curves(ax, scale):
+    def plot_curves(ax, scale, title=None):
         if plot_all_curves:
             alpha = prob_t.shape[1] / 42600.0
             ax.plot(prob_t, color='tab:blue', alpha=alpha)
@@ -54,12 +59,13 @@ def plot_median_mean(prob_t, prob_l, plot_all_curves=False, save_path=None, titl
         ax.grid()
         ax.set_xlabel("Layer")
         ax.set_ylabel(y_label)
-        ax.set_title(title + f' ({scale} scale)')
+        title = '' if not title else title + f' ({scale} scale)'
+        ax.set_title(title)
         ax.legend(loc='best')
 
     # Plot linear scale
     if scale in ['both', 'linear']:
-        plot_curves(ax1, 'Linear')
+        plot_curves(ax1, 'linear', title)
 
     # Plot log scale
     if scale in ['both', 'log']:
@@ -68,7 +74,7 @@ def plot_median_mean(prob_t, prob_l, plot_all_curves=False, save_path=None, titl
         else:
             fig.subplots_adjust(wspace=0.3)
             ax2 = fig.add_subplot(122, sharex=ax1)
-        plot_curves(ax2, 'log')
+        plot_curves(ax2, 'log', title)
         ax2.set_yscale('log')
 
     # Save figure if path provided
@@ -79,7 +85,7 @@ def plot_median_mean(prob_t, prob_l, plot_all_curves=False, save_path=None, titl
 
 
 
-def plot_h_bar(prob_truth, prob_lie, selected_layers, title, y_label="top tokens", save_path=None):
+def plot_h_bar(prob_truth, prob_lie, selected_layers, title=None, y_label="top tokens", save_path=None):
     width = 0.5
     k = prob_truth.shape[0]
     fig, axs = plt.subplots(1, len(selected_layers), figsize=(len(selected_layers)*2.5, 5))
@@ -104,13 +110,14 @@ def plot_h_bar(prob_truth, prob_lie, selected_layers, title, y_label="top tokens
         axs[i].set_xlabel(f'\nlayer_id: {l}')
 
     fig.align_labels()
-    fig.suptitle(title)
+    if title:
+        fig.suptitle(title)
     if save_path:
         fig.savefig(save_path)
     plt.show()
 
 
-def plot_distance_matrix(truth_token_dist, lie_token_dist, sub_titles=['truth tokens', 'lie tokens'], sup_title="Pairwise distances", save_path =None, norm=None, remove_diagonal=True):
+def plot_distance_matrix(truth_token_dist, lie_token_dist, sub_titles=['truth tokens', 'lie tokens'], sup_title=None, save_path =None, norm=None, remove_diagonal=True):
 
     fig, axes = plt.subplots(1, 2, figsize=(10, 5))
     if remove_diagonal:
@@ -135,7 +142,8 @@ def plot_distance_matrix(truth_token_dist, lie_token_dist, sub_titles=['truth to
     # Plot average distance matrix
     plot_matrix(axes[1], lie_token_dist, sub_titles[1], norm)
 
-    fig.suptitle(sup_title)
+    if sup_title:
+        fig.suptitle(sup_title)
 
     plt.tight_layout()
 

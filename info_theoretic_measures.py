@@ -46,13 +46,14 @@ def get_KL_divergence(model, hidden_states, lenses, mode='last'):
     KL = torch.zeros([num_modules-1, num_samples])
     for i in tqdm(range(num_modules-1)):
 
-        unembedded = unembed(model, hidden_states[i], lenses[i])
+        
+        unembedded = unembed(model, hidden_states[i], lenses[i]).log_softmax(dim=-1)
         if mode == 'last':
-            target = unembed(model, hidden_states[-1], lenses[i])
+            target = unembed(model, hidden_states[-1], lenses[i]).softmax(dim=-1)
         else:
-            target = unembed(model, hidden_states[i+1], lenses[i])
+            target = unembed(model, hidden_states[i+1], lenses[i]).softmax(dim=-1)
 
-        KL[i] = torch.nn.functional.kl_div(unembedded, target, log_target=True, reduction='none').sum(dim=-1)
+        KL[i] = torch.nn.functional.kl_div(unembedded, target, log_target=False, reduction='none').sum(dim=-1)
 
     return KL
 
