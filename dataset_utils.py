@@ -458,3 +458,28 @@ def load_csv_dataset(dataset_name):
         assert False, f'{dataset_name} not found'
 
     return train_dataset
+
+def check_alternative_answers(model, tokenizer, output_tokens, max_new_tokens, top_k_tokens, target_answers, batch_size=64):
+    device = model.device
+    pad_token_id = tokenizer.pad_token_id
+    tokens = output_tokens['input_ids'][:,:-max_new_tokens]
+    attention = output_tokens['attention_mask'][:,:-max_new_tokens]
+    to_consider = torch.zeros_like(top_k_tokens).numpy().astype(bool)
+    to_consider[:, 0] = True
+    k = to_consider.shape[1]
+    for i in range(1, k):
+        next_likely_token = top_k_tokens[:,i].unsqueeze(1)
+        next_likely_attention = torch.where(next_likely_token!=pad_token_id, 1, 0).long()
+
+        new_inputs = {'input_ids': torch.cat([tokens, next_likely_token], dim=1), 'attention_mask': torch.cat([attention, next_likely_attention], dim=1)}
+        new_inputs = {k: v.to(device) for k, v in new_inputs.items()}
+
+        answer_tokens = []
+        total_batches = len(next_likely_token) // batch_size
+        for token_batch, attention_batch in tqdm(zip(batchify(new_inputs['input_ids'], batch_size), batchify(new_inputs['attention_mask'], batch_size)), total=total_batches):
+            inputs_batch = {'input_ids': token_batch.to(device), 'attention_mask': attention_batch.to(device)}
+            outputs = model.generate(**inputs_batch, max_new_tokens=max_new_tokens-1, do_sample=False, pad_token_id=pad_token_id).detach().cpu()
+            answer_tokens.append(outputs[:, -max_new_tokens:])
+        to_consider[:,i] = check_answer(tokenizer, np.concatenate(answer_tokens, axis=0), target_answers, batch_size=batch_size)
+
+    return to_consider
