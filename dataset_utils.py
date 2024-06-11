@@ -5,6 +5,7 @@ from datasets import load_dataset
 import os
 import json
 import torch.nn.functional as F
+import random
 
 from utils import *
 
@@ -23,9 +24,50 @@ def load_data_set(dataset_name, lie_format=None, truth_format=None):
         dataset_dict = load_data_freebase_questions(lie_format, truth_format)
     elif dataset_name == 'cities':
         dataset_dict = load_data_cities(lie_format, truth_format)
+    elif dataset_name == 'cities_binary':
+        dataset_dict = load_data_cities_binary(lie_format, truth_format)
     else:
         assert 0, 'no such dataset'
     return dataset_dict
+
+def load_data_cities_binary(lie_format, truth_format):
+    if not os.path.exists('data/cities_binary.csv'):
+        os.system("git clone https://github.com/saprmarks/geometry-of-truth.git /root/geometry-of-truth")
+        os.system("mv /root/geometry-of-truth/datasets/*.csv data")
+    df = pd.read_csv('data/cities_binary.csv')
+
+    # select all entries where country and correct_country are different
+    df = df[df['country'] != df['correct_country']]
+    correct_answer = df.correct_country.values
+    false_answer = df.country.values
+    cities = df.city.values
+    random_vector = [random.choice([0, 1]) for _ in cities]
+    questions = [f"Is the city of {city} in {c1 if r else c2} or {c2 if r else c1}?"
+                for city, c1, c2, r in zip(cities, correct_answer, false_answer, random_vector)]
+    lie_format = ("<QuestionAnswer>\n<question>Is the city of Paris in Germany or France?</question>\n<answer_type>True</answer_type>\n<answer>France</answer>\n</QuestionAnswer>\n"
+                "\n<QuestionAnswer>\n<question>Is the city of Tokyo in Japan or China?</question>\n<answer_type>False</answer_type>\n<answer>China</answer></QuestionAnswer>\n"
+                "\n<QuestionAnswer>\n<question>{}</question>\n<answer_type>False</answer_type>\n<answer>")
+    truth_format = ("<QuestionAnswer>\n<question>Is the city of Paris in Germany or France?</question>\n<answer_type>True</answer_type>\n<answer>France</answer>\n</QuestionAnswer>\n"
+                "\n<QuestionAnswer>\n<question>Is the city of Tokyo in Japan or China?</question>\n<answer_type>False</answer_type>\n<answer>China</answer></QuestionAnswer>\n"
+                "\n<QuestionAnswer>\n<question>{}</question>\n<answer_type>True</answer_type>\n<answer>")
+    
+    lie_scenario = [lie_format.format(q) for q in questions]
+    truth_scenario = [truth_format.format(q) for q in questions]
+
+    dataset_dict={
+        'org_data': np.array(questions),
+        'dataset_name': 'cities_binary', 
+        'lie_scenario' : np.array(lie_scenario),
+        'truth_scenario' : np.array(truth_scenario),
+        'true_answer': np.array(correct_answer),
+        'false_answer': np.array(false_answer),
+        'lie_format': lie_format,
+        'truth_format': truth_format,
+        'topic': None
+        }
+    
+    return dataset_dict
+
 
 def load_data_cities(lie_format, truth_format):
     os.system("git clone https://github.com/saprmarks/geometry-of-truth.git /root/geometry-of-truth")
