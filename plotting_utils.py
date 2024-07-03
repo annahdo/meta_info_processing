@@ -150,3 +150,31 @@ def plot_distance_matrix(truth_token_dist, lie_token_dist, sub_titles=['truth to
     if save_path:
         fig.savefig(save_path)
     plt.show()
+
+def plot_p_values(p_values, save_path=None, title=None, y_label='p-value'):
+    plt.figure(figsize=(7, 5))
+    plt.grid()
+    plt.axhline(y=0.05, color='tab:red', linestyle='--', label='p=0.05')
+    plt.plot(p_values, color='tab:blue')
+    plt.xlabel('Layer')
+    plt.ylabel(y_label)
+    # log scale
+    plt.yscale('log')
+    plt.title(title)
+    plt.legend()
+    if save_path:
+        plt.savefig(save_path)
+    plt.show()
+
+def plot_diff(diff, save_path=None, title=None, y_label='difference'):
+    plt.figure(figsize=(7, 5))
+    plt.grid()
+    plt.plot(diff, color='tab:blue')
+    plt.xlabel('Layer')
+    plt.ylabel(y_label)
+    # log scale
+    plt.title(title)
+    plt.legend()
+    if save_path:
+        plt.savefig(save_path)
+    plt.show()

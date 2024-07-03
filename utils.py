@@ -9,6 +9,7 @@ import re
 from matplotlib import pyplot as plt
 import torch.nn.functional as F
 import os
+from scipy.stats import wilcoxon, false_discovery_control
 
 
 
@@ -512,3 +513,17 @@ def pcossim(x, y):
     y_expanded = y.unsqueeze(1) 
     cosine_similarity_matrix = F.cosine_similarity(x_expanded, y_expanded, dim=-1)
     return cosine_similarity_matrix.mean(dim=0)
+
+# test for statistical significance
+def test_statistical_significance(truth, lie):
+    p_values = []
+    diff_means = []
+    for i in range(len(truth)):
+        w = wilcoxon(truth[i], lie[i], method='approx')
+        p_values.append(w.pvalue)
+        diff_means.append(truth[i].mean() - lie[i].mean())
+
+    p_values = false_discovery_control(np.array(p_values), axis=0, method='by')
+    
+    return p_values, np.array(diff_means)
+
